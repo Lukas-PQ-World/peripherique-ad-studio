@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:#e9e4da}a{color:#d2161b}a:hover{color:#2b2a29}input,select,textarea,button{font-family:'Jost',sans-serif}</style>
+</helmet>
+<div style="font-family:'Jost',sans-serif;color:#2b2a29;background:#e9e4da;min-height:100vh;display:flex;flex-direction:column">
+
+<header style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 24px;background:#f7f4ee;border-bottom:1px solid #d9d1c2">
+  <div style="display:flex;flex-direction:column;gap:2px">
+    <div style="font-family:'VT323',monospace;font-size:22px;background:#2b2a29;color:#ede6d8;padding:2px 10px;align-self:flex-start">AD STUDIO · POV: SUMMER TOUR 2027</div>
+    <div style="font-size:13px;opacity:.75">Nico Santos · Sommerrausch-Finale · So 27.06.2027 · Seegarten Amorbach</div>
+  </div>
+  <div style="display:flex;gap:4px;flex-wrap:wrap">
+    <sc-for list="{{ phasesV }}" as="p" hint-placeholder-count="4">
+      <button onClick="{{ p.onClick }}" style="border:1px solid #2b2a29;background:{{ p.bg }};color:{{ p.fg }};padding:6px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:0;line-height:1.15"><span style="font-weight:600;font-size:13px">{{ p.label }}</span><span style="font-size:11px;opacity:.75">{{ p.time }}</span></button>
+    </sc-for>
+  </div>
+  <div style="flex:1"></div>
+  <div style="display:flex;gap:0;border:1px solid #2b2a29">
+    <button onClick="{{ goOverview }}" style="border:none;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:600;background:{{ ovBg }};color:{{ ovFg }}">Übersicht</button>
+    <button onClick="{{ goEditor }}" style="border:none;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:600;background:{{ edBg }};color:{{ edFg }}">Editor</button>
+  </div>
+  <a href="Nico Santos Meta Ads.dc.html" style="font-size:13px">Meta-Ads-Übersicht</a>
+</header>
+
+<sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+<main style="padding:32px 32px 48px;display:flex;flex-direction:column;gap:28px">
+  <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h1 style="margin:0;font-weight:500;font-size:40px;line-height:1.05">{{ phaseTitle }}</h1>
+      <div style="font-size:15px;opacity:.75">{{ phaseSub }}</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="font-size:13px;opacity:.75;max-width:380px;text-wrap:pretty">Format anklicken → Editor. Video-Formate bekommen Schnitt, Texte, Musik und Effekte. Bild-Formate bekommen Hintergrund und Texte.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px">
+    <sc-for list="{{ overview }}" as="o" hint-placeholder-count="9">
+      <button onClick="{{ o.open }}" style="text-align:left;background:#f7f4ee;border:1px solid transparent;padding:14px;display:flex;flex-direction:column;gap:12px;cursor:pointer;color:inherit" style-hover="border-color:#2b2a29">
+        <div style="height:250px;display:flex;align-items:center;justify-content:center;background:#e2dccf;align-self:stretch">
+          <div style="position:relative;overflow:hidden;width:{{ o.mw }};height:{{ o.mh }};background:#1d1c1b;box-shadow:0 6px 18px rgba(40,30,20,.2)">
+            <div style="position:absolute;inset:0;background-image:url('{{ o.bg }}');background-size:cover;background-position:center"></div>
+            <sc-for list="{{ o.texts }}" as="x">
+              <div style="position:absolute;left:{{ x.left }};top:{{ x.top }};font-size:{{ x.fs }};font-family:{{ x.ff }};font-weight:{{ x.fw }};background:{{ x.bg }};color:{{ x.color }};padding:{{ x.pad }};transform:{{ x.tf }};transform-origin:{{ x.origin }};white-space:pre;line-height:1;letter-spacing:.04em;text-align:{{ x.align }};text-shadow:{{ x.shadow }}">{{ x.text }}</div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><div style="font-family:'VT323',monospace;font-size:24px;line-height:1">{{ o.label }}</div><div style="font-size:12px;opacity:.7">{{ o.net }} · {{ o.size }}</div></div>
+          <span style="font-size:11px;font-weight:600;padding:2px 8px;background:{{ o.stBg }};color:{{ o.stFg }};white-space:nowrap">{{ o.status }}</span>
+        </div>
+        <div style="font-size:12px;opacity:.75">{{ o.meta }}</div>
+      </button>
+    </sc-for>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;background:#f7f4ee;padding:20px 24px">
+    <div style="font-family:'VT323',monospace;font-size:24px">FERTIG GESCHNITTENE REELS</div>
+    <div style="display:flex;gap:10px 24px;flex-wrap:wrap;font-size:14px">
+      <a href="Nico Santos Reel Phase 1 Geschenk 15s.dc.html">Phase 1 · Geschenk 15 s</a>
+      <a href="Nico Santos Reel Phase 2 Ankuendigung 22s.dc.html">Phase 2 · Ankündigung 22 s</a>
+      <a href="Nico Santos Reel Phase 4 Last Call 12s.dc.html">Phase 4 · Last Call 12 s</a>
+      <a href="Nico Santos Reel 22s Final 9x16.dc.html">Final 22 s</a>
+      <a href="Nico Santos Reel 15s Final 9x16.dc.html">Final 15 s</a>
+    </div>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+<div ref="{{ editorRef }}" style="display:flex;flex-direction:column;height:{{ editorH }};min-height:860px">
+<div style="display:grid;grid-template-columns:220px minmax(0,1fr) 310px;grid-template-rows:minmax(0,1fr);min-height:0;flex:1">
+
+  <aside style="background:#f7f4ee;border-right:1px solid #d9d1c2;display:flex;flex-direction:column;min-height:0;min-width:0;overflow-y:auto;overflow-x:hidden">
+    <div style="padding:14px 14px 8px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.7">Formate</div>
+    <div style="display:flex;flex-direction:column;padding:0 8px 12px;gap:2px">
+      <sc-for list="{{ formatsV }}" as="f" hint-placeholder-count="9">
+        <button onClick="{{ f.onClick }}" style="display:flex;align-items:center;gap:10px;border:none;background:{{ f.bg }};color:{{ f.fg }};padding:6px 8px;cursor:pointer;text-align:left">
+          <span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="width:{{ f.rw }};height:{{ f.rh }};border:1.5px solid currentColor;display:block"></span></span>
+          <span style="display:flex;flex-direction:column;min-width:0;line-height:1.2"><span style="font-size:13px;font-weight:600;overflow-wrap:anywhere">{{ f.label }}</span><span style="font-size:11px;opacity:.7;overflow-wrap:anywhere">{{ f.net }} · {{ f.ratio }}</span></span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="border-top:1px solid #d9d1c2;padding:12px 14px 8px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.7">Assets</span>
+      <button onClick="{{ openUpload }}" style="font-size:12px;font-weight:600;border:1px solid #2b2a29;background:#2b2a29;color:#ede6d8;padding:4px 10px;cursor:pointer">Hochladen</button>
+    </div>
+    <div style="display:flex;gap:2px;padding:0 8px 8px">
+      <sc-for list="{{ assetTabs }}" as="a">
+        <button onClick="{{ a.onClick }}" style="flex:1;border:none;font-size:12px;padding:5px 0;cursor:pointer;background:{{ a.bg }};color:{{ a.fg }}">{{ a.label }}</button>
+      </sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:0 10px 16px">
+      <sc-for list="{{ assetsV }}" as="a" hint-placeholder-count="6">
+        <div draggable="true" onDragStart="{{ a.drag }}" onClick="{{ a.add }}" title="{{ a.hint }}" style="display:flex;flex-direction:column;gap:4px;cursor:grab">
+          <div style="aspect-ratio:1/1;background-color:{{ a.color }};background-image:url('{{ a.thumb }}');background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:flex-end;padding:3px;box-sizing:border-box">
+            <span style="font-family:'VT323',monospace;font-size:14px;background:rgba(0,0,0,.6);color:#fff;padding:0 4px">{{ a.badge }}</span>
+          </div>
+          <span style="font-size:10px;line-height:1.15">{{ a.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="padding:0 14px 16px;font-size:11px;opacity:.6;text-wrap:pretty">{{ assetHint }}</div>
+  </aside>
+
+  <section style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 16px;min-width:0;min-height:0;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
+      <sc-if value="{{ isVideo }}">
+        <button onClick="{{ togglePlay }}" style="min-width:92px;height:34px;border:none;background:#d2161b;color:#ede6d8;font-weight:600;font-size:14px;cursor:pointer">{{ playLabel }}</button>
+        <button onClick="{{ toStart }}" style="height:34px;border:1px solid #2b2a29;background:none;padding:0 10px;cursor:pointer;font-size:13px">Anfang</button>
+        <span style="font-family:'VT323',monospace;font-size:22px;min-width:150px;text-align:center">{{ timeLabel }}</span>
+      </sc-if>
+      <button onClick="{{ addText }}" style="height:34px;border:1px solid #2b2a29;background:#2b2a29;color:#ede6d8;padding:0 12px;cursor:pointer;font-size:13px;font-weight:600">+ Textbox</button>
+      <sc-if value="{{ isVideo }}">
+        <button onClick="{{ toggleSafe }}" style="height:34px;border:1px solid #2b2a29;background:{{ safeBg }};color:{{ safeFg }};padding:0 10px;cursor:pointer;font-size:13px">Safe-Zones</button>
+      </sc-if>
+    </div>
+    <div style="font-size:12px;opacity:.65">{{ fmtLine }}</div>
+    <div ref="{{ stageBox }}" style="flex:1;min-height:380px;align-self:stretch;display:flex;align-items:center;justify-content:center;overflow:hidden">
+    <div ref="{{ canvasRef }}" onPointerDown="{{ canvasDown }}" onDragOver="{{ allowDrop }}" onDrop="{{ dropCanvas }}" style="position:relative;overflow:hidden;flex-shrink:0;width:{{ cvW }};height:{{ cvH }};background:#1d1c1b;box-shadow:0 12px 32px rgba(40,30,20,.25);touch-action:none">
+      <div style="position:absolute;inset:0;background-image:url('{{ cvBg }}');background-size:cover;background-position:center;pointer-events:none"></div>
+      <sc-if value="{{ isVideo }}" hint-placeholder-val="{{ false }}">
+        <div ref="{{ slot0 }}" style="position:absolute;inset:0;pointer-events:none;will-change:transform"><video ref="{{ vid0 }}" onLoadedMetadata="{{ mediaReady }}" onLoadedData="{{ mediaReady }}" muted="{{ true }}" playsInline="{{ true }}" preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video><img ref="{{ img0 }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none"></div>
+        <div ref="{{ slot1 }}" style="position:absolute;inset:0;pointer-events:none;will-change:transform"><video ref="{{ vid1 }}" onLoadedMetadata="{{ mediaReady }}" onLoadedData="{{ mediaReady }}" muted="{{ true }}" playsInline="{{ true }}" preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video><img ref="{{ img1 }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none"></div>
+        <div ref="{{ ovRef }}" style="position:absolute;inset:0;pointer-events:none;opacity:0;z-index:5"></div>
+      </sc-if>
+      <sc-for list="{{ cvTexts }}" as="x">
+        <div onPointerDown="{{ x.down }}" onDoubleClick="{{ x.dbl }}" style="position:absolute;z-index:6;left:{{ x.left }};top:{{ x.top }};font-size:{{ x.fs }};font-family:{{ x.ff }};font-weight:{{ x.fw }};background:{{ x.bg }};color:{{ x.color }};padding:{{ x.pad }};transform:{{ x.tf }};transform-origin:{{ x.origin }};opacity:{{ x.op }};outline:{{ x.outline }};outline-offset:3px;white-space:pre;line-height:1;letter-spacing:.04em;text-align:{{ x.align }};text-shadow:{{ x.shadow }};cursor:move;user-select:none">{{ x.text }}</div>
+      </sc-for>
+      <sc-if value="{{ showSafeZones }}">
+        <div style="position:absolute;left:0;right:0;top:0;height:{{ safeTop }};background:repeating-linear-gradient(45deg,rgba(77,163,255,.18) 0 8px,transparent 8px 16px);border-bottom:1px dashed #4da3ff;pointer-events:none;z-index:7"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:{{ safeBot }};background:repeating-linear-gradient(45deg,rgba(77,163,255,.18) 0 8px,transparent 8px 16px);border-top:1px dashed #4da3ff;pointer-events:none;z-index:7"></div>
+      </sc-if>
+    </div>
+    </div>
+    <div style="font-size:12px;opacity:.6;text-align:center;max-width:520px;text-wrap:pretty">Textbox ziehen zum Positionieren · Doppelklick zum Bearbeiten · Assets per Drag &amp; Drop auf Canvas oder Timeline · Leertaste = Play</div>
+  </section>
+
+  <aside style="background:#f7f4ee;border-left:1px solid #d9d1c2;display:flex;flex-direction:column;min-height:0;min-width:0;overflow-y:auto;overflow-x:hidden">
+    <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:#2b2a29;color:#ede6d8">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'VT323',monospace;font-size:22px">KI-SCHNITT</span><span style="font-size:11px;opacity:.7">{{ kiStatus }}</span></div>
+      <sc-if value="{{ isVideo }}">
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;opacity:.7">Länge</span>
+          <div style="display:flex;gap:2px"><sc-for list="{{ kiLens }}" as="k"><button onClick="{{ k.onClick }}" style="flex:1;border:1px solid #6b6763;background:{{ k.bg }};color:{{ k.fg }};padding:4px 0;font-size:12px;cursor:pointer">{{ k.label }}</button></sc-for></div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;opacity:.7">Schnitt-Stil</span>
+          <div style="display:flex;gap:2px"><sc-for list="{{ kiStyles }}" as="k"><button onClick="{{ k.onClick }}" style="flex:1;border:1px solid #6b6763;background:{{ k.bg }};color:{{ k.fg }};padding:4px 0;font-size:12px;cursor:pointer">{{ k.label }}</button></sc-for></div></div>
+        <button onClick="{{ kiCut }}" style="border:none;background:#d2161b;color:#ede6d8;padding:8px;font-weight:600;font-size:13px;cursor:pointer">Schnitt neu generieren</button>
+      </sc-if>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button onClick="{{ kiTexts }}" style="flex:1 1 120px;min-width:0;white-space:normal;border:1px solid #ede6d8;background:none;color:#ede6d8;padding:7px 4px;font-size:12px;cursor:pointer">Texte vorschlagen</button>
+        <button onClick="{{ exportBrief }}" style="flex:1 1 120px;min-width:0;white-space:normal;border:1px solid #ede6d8;background:none;color:#ede6d8;padding:7px 4px;font-size:12px;cursor:pointer">Auftrag an Claude</button>
+      </div>
+    </div>
+
+    <sc-if value="{{ selText }}">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'VT323',monospace;font-size:22px">TEXTBOX</span>
+          <div style="display:flex;gap:6px"><button onClick="{{ dupSel }}" style="font-size:12px;border:1px solid #2b2a29;background:none;padding:3px 8px;cursor:pointer">Duplizieren</button><button onClick="{{ delSel }}" style="font-size:12px;border:1px solid #d2161b;color:#d2161b;background:none;padding:3px 8px;cursor:pointer">Löschen</button></div></div>
+        <textarea ref="{{ textArea }}" value="{{ st.text }}" onInput="{{ onText }}" rows="3" style="font-size:15px;padding:8px 10px;border:1px solid #cfc7b8;background:#fff;resize:vertical;width:100%;box-sizing:border-box"></textarea>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.7">Stil</span>
+          <div style="display:flex;flex-wrap:wrap;gap:4px"><sc-for list="{{ styleOpts }}" as="o"><button onClick="{{ o.onClick }}" style="border:1px solid #2b2a29;background:{{ o.bg }};color:{{ o.fg }};padding:4px 8px;font-size:12px;cursor:pointer;outline:{{ o.outline }};outline-offset:2px">{{ o.label }}</button></sc-for></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Schrift<select value="{{ st.font }}" onChange="{{ onFont }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8;background:#fff;text-transform:none;letter-spacing:0;font-weight:400"><option value="pix">Pixel (VT323)</option><option value="jost">Jost</option></select></label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Animation<select value="{{ st.anim }}" onChange="{{ onAnim }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8;background:#fff;text-transform:none;letter-spacing:0;font-weight:400"><sc-for list="{{ animOpts }}" as="o"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select></label>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Größe · {{ st.sizeLabel }}<input type="range" min="2" max="30" step="0.2" value="{{ st.size }}" onInput="{{ onSize }}"></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Drehung · {{ st.rotLabel }}<input type="range" min="-15" max="15" step="0.5" value="{{ st.rot }}" onInput="{{ onRot }}"></label>
+        <div style="display:flex;gap:4px">
+          <button onClick="{{ alignLeft }}" style="flex:1;border:1px solid #2b2a29;background:none;padding:5px;font-size:12px;cursor:pointer">Links</button>
+          <button onClick="{{ alignCenter }}" style="flex:1;border:1px solid #2b2a29;background:none;padding:5px;font-size:12px;cursor:pointer">Zentriert</button>
+        </div>
+        <sc-if value="{{ isVideo }}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Ein (s)<input type="number" step="0.1" min="0" value="{{ st.start }}" onChange="{{ onStart }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8"></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Aus (s)<input type="number" step="0.1" min="0" value="{{ st.end }}" onChange="{{ onEnd }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8"></label>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ selClip }}">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'VT323',monospace;font-size:22px">CLIP · {{ sc.label }}</span><button onClick="{{ delSel }}" style="font-size:12px;border:1px solid #d2161b;color:#d2161b;background:none;padding:3px 8px;cursor:pointer">Löschen</button></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Dauer (s)<input type="number" step="0.1" min="0.3" value="{{ sc.dur }}" onChange="{{ onClipDur }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8"></label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Tempo<select value="{{ sc.speed }}" onChange="{{ onClipSpeed }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8;background:#fff;text-transform:none;letter-spacing:0;font-weight:400"><option value="auto">Auto (Speed-Ramp)</option><option value="0.5">0,5× Slow-Mo</option><option value="0.75">0,75×</option><option value="1">1×</option><option value="1.5">1,5×</option><option value="2">2×</option></select></label>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.7">Übergang in diesen Clip</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px"><sc-for list="{{ transOpts }}" as="o"><button onClick="{{ o.onClick }}" style="border:1px solid #2b2a29;background:{{ o.bg }};color:{{ o.fg }};padding:8px 2px;font-size:12px;cursor:pointer;display:flex;flex-direction:column;gap:2px;align-items:center;line-height:1.1"><span style="font-weight:600">{{ o.label }}</span><span style="font-size:10px;opacity:.7">{{ o.sub }}</span></button></sc-for></div>
+          <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" checked="{{ sc.link }}" onChange="{{ onClipLink }}">Übergangs-Ton automatisch koppeln</label>
+          <button onClick="{{ transAll }}" style="border:1px solid #2b2a29;background:none;padding:6px;font-size:12px;cursor:pointer">Diesen Übergang auf alle Schnitte anwenden</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ selSfx }}">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'VT323',monospace;font-size:22px">EFFEKT · {{ sx.label }}</span><button onClick="{{ delSel }}" style="font-size:12px;border:1px solid #d2161b;color:#d2161b;background:none;padding:3px 8px;cursor:pointer">Löschen</button></div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px"><sc-for list="{{ fxOpts }}" as="o"><button onClick="{{ o.onClick }}" style="border:1px solid #2b2a29;background:{{ o.bg }};color:{{ o.fg }};padding:4px 8px;font-size:12px;cursor:pointer">{{ o.label }}</button></sc-for></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Zeitpunkt (s)<input type="number" step="0.05" min="0" value="{{ sx.at }}" onChange="{{ onSfxAt }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8"></label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Pegel · {{ sx.vLabel }}<input type="range" min="0.02" max="1" step="0.02" value="{{ sx.v }}" onInput="{{ onSfxV }}"></label>
+        </div>
+        <button onClick="{{ previewSfx }}" style="border:1px solid #2b2a29;background:none;padding:6px;font-size:12px;cursor:pointer">Anhören</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ selAudio }}">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'VT323',monospace;font-size:22px">AUDIO · {{ sa.label }}</span><button onClick="{{ delSel }}" style="font-size:12px;border:1px solid #d2161b;color:#d2161b;background:none;padding:3px 8px;cursor:pointer">Löschen</button></div>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Lautstärke · {{ sa.volLabel }}<input type="range" min="0" max="1.5" step="0.05" value="{{ sa.vol }}" onInput="{{ onAudVol }}"></label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Start in Quelle (s)<input type="number" step="0.5" min="0" value="{{ sa.offset }}" onChange="{{ onAudOffset }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8"></label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Beginnt bei (s)<input type="number" step="0.1" min="0" value="{{ sa.at }}" onChange="{{ onAudAt }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8"></label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Fade-in (s)<input type="number" step="0.1" min="0" value="{{ sa.fadeIn }}" onChange="{{ onAudFi }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8"></label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Fade-out (s)<input type="number" step="0.1" min="0" value="{{ sa.fadeOut }}" onChange="{{ onAudFo }}" style="font-size:13px;padding:5px;border:1px solid #cfc7b8"></label>
+        </div>
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" checked="{{ sa.introLow }}" onChange="{{ onAudIntro }}">Leise im Hook, voll ab 1. Schnitt</label>
+        <div style="font-size:12px;opacity:.65;text-wrap:pretty">Wellenform in der Timeline horizontal ziehen = Startpunkt im Song verschieben. Klang: EQ, Kompressor und Limiter sind automatisch aktiv; unter Hits/Stempeln wird die Musik kurz abgesenkt.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ selNone }}">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'VT323',monospace;font-size:22px">AD-COPY · {{ fmtLabel }}</span>
+          <button onClick="{{ toggleDone }}" style="font-size:12px;font-weight:600;border:1px solid #2b2a29;background:{{ doneBg }};color:{{ doneFg }};padding:3px 8px;cursor:pointer">{{ doneLabel }}</button></div>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85"><span style="display:flex;justify-content:space-between">Primärtext<span style="font-weight:400;color:{{ cp.primColor }}">{{ cp.primCount }}</span></span><textarea value="{{ cp.primary }}" onInput="{{ onPrimary }}" rows="7" style="font-size:14px;line-height:1.45;padding:8px 10px;border:1px solid #cfc7b8;background:#fff;resize:vertical;text-transform:none;letter-spacing:0;font-weight:400"></textarea></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85"><span style="display:flex;justify-content:space-between">Überschrift<span style="font-weight:400;color:{{ cp.headColor }}">{{ cp.headCount }}</span></span><input value="{{ cp.headline }}" onInput="{{ onHeadline }}" style="font-size:14px;padding:6px 10px;border:1px solid #cfc7b8;text-transform:none;letter-spacing:0;font-weight:400"></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">Beschreibung<input value="{{ cp.desc }}" onInput="{{ onDesc }}" style="font-size:14px;padding:6px 10px;border:1px solid #cfc7b8;text-transform:none;letter-spacing:0;font-weight:400"></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.85">CTA-Button<select value="{{ cp.cta }}" onChange="{{ onCta }}" style="font-size:14px;padding:6px;border:1px solid #cfc7b8;background:#fff;text-transform:none;letter-spacing:0;font-weight:400"><option>Tickets kaufen</option><option>Jetzt kaufen</option><option>Mehr dazu</option><option>Jetzt buchen</option></select></label>
+        <div style="font-size:12px;opacity:.65;text-wrap:pretty">Primärtext: die ersten 125 Zeichen sind ohne „Mehr“ sichtbar. Überschrift ideal bis 40 Zeichen. Element auf Canvas oder Timeline anklicken zum Bearbeiten.</div>
+      </div>
+    </sc-if>
+  </aside>
+</div>
+
+<sc-if value="{{ isVideo }}">
+<div style="background:#242322;color:#ede6d8;display:grid;grid-template-columns:160px minmax(0,1fr);user-select:none;border-top:2px solid #1d1c1b">
+  <div style="display:flex;flex-direction:column;border-right:1px solid #3a3836">
+    <div style="height:26px;display:flex;align-items:center;gap:4px;padding:0 8px;font-size:11px;opacity:.8">Zoom <button onClick="{{ zoomOut }}" style="width:22px;height:20px;border:1px solid #6b6763;background:none;color:#ede6d8;cursor:pointer;padding:0">−</button><button onClick="{{ zoomIn }}" style="width:22px;height:20px;border:1px solid #6b6763;background:none;color:#ede6d8;cursor:pointer;padding:0">+</button></div>
+    <div style="height:64px;display:flex;flex-direction:column;justify-content:center;padding:0 10px;border-top:1px solid #3a3836"><span style="font-size:12px;font-weight:600">Video</span><span style="font-size:11px;opacity:.6">{{ clipCount }} Clips · Übergänge ◆</span></div>
+    <div style="height:{{ textH }};display:flex;flex-direction:column;justify-content:center;padding:0 10px;border-top:1px solid #3a3836"><span style="font-size:12px;font-weight:600">Text</span><span style="font-size:11px;opacity:.6">{{ textCount }} Einblendungen</span></div>
+    <sc-for list="{{ audioV }}" as="r">
+      <div style="height:56px;display:flex;align-items:center;gap:6px;padding:0 8px;border-top:1px solid #3a3836">
+        <button onClick="{{ r.mute }}" title="Stumm" style="width:22px;height:22px;border:1px solid #6b6763;background:{{ r.mBg }};color:#ede6d8;font-size:11px;font-weight:600;cursor:pointer;padding:0">M</button>
+        <button onClick="{{ r.solo }}" title="Solo" style="width:22px;height:22px;border:1px solid #6b6763;background:{{ r.sBg }};color:{{ r.sFg }};font-size:11px;font-weight:600;cursor:pointer;padding:0">S</button>
+        <div style="display:flex;flex-direction:column;min-width:0"><span style="font-size:12px;font-weight:600">{{ r.kind }}</span><span style="font-size:11px;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.label }}</span></div>
+      </div>
+    </sc-for>
+    <div style="height:46px;display:flex;align-items:center;gap:6px;padding:0 8px;border-top:1px solid #3a3836;margin-bottom:14px">
+      <button onClick="{{ sfxMute }}" title="Stumm" style="width:22px;height:22px;border:1px solid #6b6763;background:{{ sfxMBg }};color:#ede6d8;font-size:11px;font-weight:600;cursor:pointer;padding:0">M</button>
+      <button onClick="{{ sfxSolo }}" title="Solo" style="width:22px;height:22px;border:1px solid #6b6763;background:{{ sfxSBg }};color:{{ sfxSFg }};font-size:11px;font-weight:600;cursor:pointer;padding:0">S</button>
+      <div style="display:flex;flex-direction:column;min-width:0;flex:1"><span style="font-size:12px;font-weight:600">Effekte</span><input type="range" min="0" max="1" step="0.05" value="{{ sfxVol }}" onInput="{{ onSfxVol }}" title="Effekt-Bus" style="width:100%;height:12px"></div>
+    </div>
+  </div>
+  <div ref="{{ tlScroll }}" style="overflow-x:auto;overflow-y:hidden;position:relative;padding-bottom:14px">
+    <div style="position:relative;width:{{ tlW }}">
+      <div onPointerDown="{{ scrubDown }}" style="height:26px;position:relative;cursor:text;background:#1d1c1b">
+        <sc-for list="{{ ticks }}" as="k"><div style="position:absolute;left:{{ k.left }};top:0;bottom:0;border-left:1px solid #4a4744;font-size:10px;padding:3px 0 0 3px;opacity:.75;pointer-events:none">{{ k.label }}</div></sc-for>
+      </div>
+      <div onDragOver="{{ allowDrop }}" onDrop="{{ dropVideo }}" style="height:64px;position:relative;border-top:1px solid #3a3836">
+        <sc-for list="{{ clipsV }}" as="c" hint-placeholder-count="6">
+          <div draggable="true" onDragStart="{{ c.dragStart }}" onPointerDown="{{ c.select }}" style="position:absolute;top:6px;height:52px;left:{{ c.left }};width:{{ c.width }};background-color:{{ c.color }};background-image:url('{{ c.thumb }}');background-size:auto 100%;background-repeat:repeat-x;outline:{{ c.outline }};outline-offset:-2px;box-sizing:border-box;overflow:hidden;cursor:grab">
+            <div style="position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.8));font-size:11px;padding:12px 6px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none">{{ c.label }} · {{ c.durLabel }}</div>
+            <div onPointerDown="{{ c.resizeDown }}" style="position:absolute;right:0;top:0;bottom:0;width:8px;cursor:ew-resize;background:rgba(255,255,255,.3)"></div>
+          </div>
+          <sc-if value="{{ c.hasTrans }}"><button onPointerDown="{{ c.pickTrans }}" title="{{ c.transLabel }}" style="position:absolute;top:20px;left:{{ c.chipLeft }};height:24px;padding:0 6px;background:{{ c.chipBg }};color:#1d1c1b;border:none;font-size:10px;font-weight:600;cursor:pointer;z-index:2;transform:translateX(-50%);white-space:nowrap">◆ {{ c.transShort }}</button></sc-if>
+        </sc-for>
+      </div>
+      <div style="height:{{ textH }};position:relative;border-top:1px solid #3a3836">
+        <sc-for list="{{ textsV }}" as="x">
+          <div onPointerDown="{{ x.down }}" title="{{ x.text }}" style="position:absolute;left:{{ x.left }};width:{{ x.width }};top:{{ x.top }};height:20px;background:#d2161b;outline:{{ x.outline }};outline-offset:-2px;font-size:11px;padding:3px 10px 0 6px;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:grab">{{ x.text }}<div onPointerDown="{{ x.resizeDown }}" style="position:absolute;right:0;top:0;bottom:0;width:7px;cursor:ew-resize;background:rgba(255,255,255,.3)"></div></div>
+        </sc-for>
+      </div>
+      <sc-for list="{{ audioV }}" as="r">
+        <div onDragOver="{{ allowDrop }}" onDrop="{{ dropAudio }}" style="height:56px;position:relative;border-top:1px solid #3a3836">
+          <div onPointerDown="{{ r.down }}" style="position:absolute;top:5px;bottom:5px;left:{{ r.left }};width:{{ r.width }};background:rgba(111,211,196,.12);outline:{{ r.outline }};outline-offset:-2px;display:flex;align-items:center;gap:1px;padding:0 2px;box-sizing:border-box;cursor:ew-resize;opacity:{{ r.op }}">
+            <sc-for list="{{ r.bars }}" as="b"><div style="flex:1;height:{{ b.h }};background:#6fd3c4;opacity:{{ b.o }};pointer-events:none"></div></sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <div onDragOver="{{ allowDrop }}" onDrop="{{ dropSfx }}" style="height:46px;position:relative;border-top:1px solid #3a3836;opacity:{{ sfxLaneOp }}">
+        <sc-for list="{{ sfxV }}" as="s">
+          <div onPointerDown="{{ s.down }}" title="{{ s.title }}" style="position:absolute;left:{{ s.left }};width:{{ s.width }};top:{{ s.top }};height:{{ s.h }};background:{{ s.color }};outline:{{ s.outline }};outline-offset:1px;font-size:10px;color:#1d1c1b;padding:2px 4px;box-sizing:border-box;white-space:nowrap;overflow:hidden;cursor:{{ s.cursor }};border:{{ s.border }}">{{ s.label }}</div>
+        </sc-for>
+      </div>
+      <div style="position:absolute;top:0;bottom:0;left:{{ phLeft }};width:2px;background:#fff;pointer-events:none;z-index:4"></div>
+    </div>
+  </div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<input ref="{{ fileInput }}" type="file" multiple="{{ true }}" accept="image/*,video/*,audio/*" onChange="{{ onFiles }}" style="display:none">
+<sc-if value="{{ hasToast }}"><div style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2b2a29;color:#ede6d8;padding:12px 18px;font-size:14px;z-index:50;max-width:520px;box-shadow:0 10px 30px rgba(0,0,0,.3)">{{ toast }}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SRC = 'assets/clips/trailer.mp4';
+const SHOTS = { swing: [7.8, 9.5, 'Kettenkarussell'], crowd: [12.3, 13.9, 'Crowd singt'], barrier: [14.1, 14.6, 'Absperrung'], selfie: [14.8, 15.5, 'Selfie mit Fans'], stage: [16.4, 16.95, 'Bühne'], phones: [17.25, 17.75, 'Handylichter'], smile: [22.4, 24.3, 'Backstage-Lachen'], full: [0, 30, 'Trailer komplett'] };
+const IMGS = { poster: ['assets/ns-story.jpg', 'Plakat 9:16', '9/16'], feed: ['assets/ns-feed.jpg', 'Plakat 4:5', '4/5'], land: ['assets/ns-landscape.jpg', 'Plakat quer', '16/9'], logo: ['assets/sr-logo.png', 'Sommerrausch-Logo', '1/1'] };
+const FORMATS = [
+  { id: 'reel', label: 'Reel', net: 'Instagram · Facebook', w: 1080, h: 1920, kind: 'video', ratio: '9:16', safe: [14, 20] },
+  { id: 'story', label: 'Story', net: 'Instagram · Facebook', w: 1080, h: 1920, kind: 'video', ratio: '9:16', safe: [12, 18] },
+  { id: 'tiktok', label: 'TikTok In-Feed', net: 'TikTok', w: 1080, h: 1920, kind: 'video', ratio: '9:16', safe: [10, 24] },
+  { id: 'shorts', label: 'YouTube Shorts', net: 'YouTube', w: 1080, h: 1920, kind: 'video', ratio: '9:16', safe: [10, 22] },
+  { id: 'feed45', label: 'Feed 4:5', net: 'Instagram · Facebook', w: 1080, h: 1350, kind: 'image', ratio: '4:5', bg: 'feed' },
+  { id: 'feed11', label: 'Feed 1:1', net: 'Facebook · Instagram', w: 1080, h: 1080, kind: 'image', ratio: '1:1', bg: 'feed' },
+  { id: 'yt', label: 'In-Stream 16:9', net: 'YouTube', w: 1920, h: 1080, kind: 'video', ratio: '16:9', safe: [0, 14] },
+  { id: 'link', label: 'Link-Ad', net: 'Facebook', w: 1200, h: 628, kind: 'image', ratio: '1.91:1', bg: 'land' },
+  { id: 'mr', label: 'Medium Rectangle', net: 'Google Display', w: 300, h: 250, kind: 'image', ratio: '300×250', bg: 'land' },
+];
+const TR = { cut: ['Schnitt', 0, null, 'hart'], flash: ['Blitz', 0.34, 'impact', '+ Hit'], whipR: ['Whip →', 0.22, 'whoosh', '+ Whoosh'], whipL: ['Whip ←', 0.22, 'whoosh', '+ Whoosh'], xfade: ['Blende', 0.5, null, 'weich'], zoom: ['Zoom-Punch', 0.3, 'impact', '+ Hit'], wipe: ['Wisch', 0.6, 'whoosh', '+ Whoosh'], glitch: ['Glitch/VHS', 0.3, 'tick', '+ Klick'], dip: ['Schwarz', 0.5, null, 'Abblende'] };
+const TR_COLOR = { cut: '#cfcac2', flash: '#fff8ec', whipR: '#6fd3c4', whipL: '#6fd3c4', xfade: '#b8b0a3', zoom: '#ff6a5c', wipe: '#f2b84b', glitch: '#e58cff', dip: '#8a847d' };
+const FXDEF = { whoosh: ['Whoosh', '#6fd3c4', 0.4, 0.28, 0.4], impact: ['Hit', '#ff6a5c', 0.4, 0, 0.6], riser: ['Riser', '#f2b84b', 0.9, 0.9, 0.2], stamp: ['Stempel', '#e58cff', 0.25, 0, 0.55], beep: ['REC-Piep', '#8fb3ff', 0.25, 0, 0.1], tick: ['Klick', '#cfcac2', 0.06, 0, 0.1], pop: ['Pop', '#9be27a', 0.15, 0, 0.18] };
+const TSTYLE = { ink: ['Ink', '#2b2a29', '#ede6d8', 0], red: ['Rot', '#d2161b', '#ede6d8', 0], paper: ['Papier', '#ede6d8', '#2b2a29', 0], white: ['Nur Text', 'transparent', '#ffffff', 0], sticker: ['Sticker', '#d2161b', '#ede6d8', -6] };
+const ANIMS = [['pop', 'Pop'], ['type', 'Schreibmaschine'], ['slide', 'Slide-up'], ['fade', 'Fade'], ['stamp', 'Stempel'], ['none', 'Ohne']];
+const URL_T = 'https://www.reservix.de/tickets-nico-santos-pov-summer-tour-2027-in-amorbach-seegarten-amorbach-am-27-6-2027/e2615592';
+const PHASES = [
+  { id: 'geschenk', label: 'Phase 1 · Geschenk', time: 'Okt–Dez', len: 15, c: { hookA: 'UNTERM WEIHNACHTSBAUM.', hookB: 'TICKETS FÜR DEN SOMMER.', live: 'DAS GESCHENK: NICO LIVE.', cta: 'DAS GESCHENK FÜR 2027.', button: 'TICKETS VERSCHENKEN >>', sticker: 'VERSCHENKEN\n27.06.2027',
+    primary: 'Noch kein Geschenk? 🎁 Verschenk einen Sommerabend: Nico Santos live im Seegarten Amorbach.\nSonntag, 27.06.2027 · 19 Uhr – das Finale vom Sommerrausch.\n🎟️ Tickets jetzt verschenken.', headline: 'Nico Santos live – das Geschenk', desc: 'So 27.06.2027 · Seegarten Amorbach' } },
+  { id: 'ankuendigung', label: 'Phase 2 · Ankündigung', time: 'Jan–Apr', len: 22, c: { hookA: 'SOMMER 2027.', hookB: 'NICO SANTOS KOMMT.', live: 'ER SPIELT DAS FINALE.', cta: 'POV: DU BIST DABEI.', button: 'TICKETS SICHERN >>', sticker: 'SONNTAG\n19 UHR',
+    primary: 'POV: Sonntagabend, die Sonne geht über dem Seegarten unter – und du singst „Rooftop“ aus voller Kehle mit. 🎤\nNico Santos bringt seine POV: SUMMER TOUR 2027 zum großen Finale vom Sommerrausch nach Amorbach.\n📍 Seegarten Amorbach\n🗓️ Sonntag, 27.06.2027 · 19 Uhr', headline: 'Nico Santos live im Seegarten Amorbach', desc: 'So 27.06.2027 · 19 Uhr · Sommerrausch-Finale' } },
+  { id: 'knappheit', label: 'Phase 3 · Knappheit', time: 'Mai–Jun', len: 15, c: { hookA: 'SONNTAG, 19 UHR.', hookB: 'DU IM SEEGARTEN.', live: 'ER KOMMT NACH AMORBACH.', cta: 'NUR NOCH WENIGE TICKETS.', button: 'TICKETS SICHERN >>', sticker: 'WENIGE\nTICKETS',
+    primary: 'Alle singen „Rooftop“ – und du stehst draußen? 👀\nFür Nico Santos im Seegarten Amorbach gibt es nur noch wenige Tickets.\nSo 27.06.2027 · 19 Uhr\n🎟️ Jetzt sichern.', headline: 'Nur noch wenige Tickets', desc: 'Nico Santos · So 27.06.2027 · Amorbach' } },
+  { id: 'lastcall', label: 'Phase 4 · Last Call', time: 'letzte 14 Tage', len: 12, c: { hookA: 'NOCH 14 TAGE.', hookB: 'DANN IST ES SOWEIT.', live: 'LETZTE CHANCE.', cta: 'LAST CALL · LETZTE TICKETS', button: 'JETZT ODER NIE >>', sticker: 'LAST CALL\n27.06.',
+    primary: 'Der letzte Festivaltag. Der letzte Song. Nico Santos. ⏳\nSonntag, 27.06.2027 · 19 Uhr – das große Finale vom Sommerrausch im Seegarten Amorbach.\n🎟️ Tickets sichern, bevor der Sommer vorbei ist.', headline: 'Last Call: Nico Santos live', desc: 'Sonntag · 27.06.2027 · 19 Uhr' } },
+];
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+const easeOutBack = p => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+const uid = () => Math.random().toString(36).slice(2, 9);
+const fmtT = t => { const s = Math.max(0, t); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + (s % 60).toFixed(1).padStart(4, '0'); };
+const starts = clips => { const o = []; let a = 0; clips.forEach(c => { o.push(a); a += c.dur; }); return o; };
+
+function buildAd(phId, fId, ki) {
+  const P = PHASES.find(p => p.id === phId) || PHASES[1], F = FORMATS.find(f => f.id === fId), c = P.c;
+  const copy = { primary: c.primary, headline: c.headline, desc: c.desc, cta: 'Tickets kaufen', url: URL_T };
+  const T = (o) => ({ id: uid(), font: 'pix', anchor: 'left', rot: 0, start: 0, end: 999, anim: 'none', ...o });
+  if (F.kind === 'image') {
+    const wide = F.w / F.h > 1.3, texts = [T({ role: 'sticker', text: c.sticker, x: wide ? 64 : 30, y: wide ? 12 : 17, size: wide ? 7 : 3.8, style: 'sticker', font: 'jost', anchor: 'left' })];
+    if (wide) texts.push(T({ role: 'button', text: c.button, x: 50, y: 80, size: F.id === 'mr' ? 8 : 6, style: 'ink', anchor: 'center' }));
+    return { bg: 'img:' + F.bg, clips: [], texts, sfx: [], audio: [], copy, done: false };
+  }
+  const len = (ki && ki.len) || P.len, style = (ki && ki.style) || 'energie', vert = F.h > F.w, img = 'img:' + (vert ? 'poster' : 'land');
+  const seq = [['shot:swing', 3, 'cut'], ['shot:crowd', 1.9, 'whipR'], ['shot:barrier', 1.6, 'whipL'], [img, 3, 'flash'], ['shot:selfie', 1, 'flash'], ['shot:stage', 1, 'whipR'], ['shot:phones', 1, 'whipL'], ['shot:smile', 1.2, 'whipR'], [img, 4, 'flash']];
+  const map = style === 'atmo' ? { whipR: 'xfade', whipL: 'xfade', flash: 'wipe' } : style === 'clean' ? { whipR: 'cut', whipL: 'cut', flash: 'dip' } : {};
+  const k = len / 17.7;
+  const clips = seq.map(([a, d, tr], i) => ({ id: uid(), asset: a, dur: +(d * k).toFixed(2), speed: 'auto', trans: i ? (map[tr] || tr) : 'cut', link: true }));
+  const st = starts(clips), END = st[8] + clips[8].dur, X = vert ? 9 : 6;
+  const texts = [
+    T({ role: 'pov', text: 'POV:', x: X, y: vert ? 27 : 16, size: vert ? 26 : 22, style: 'white', start: 0.15, end: st[1], anim: 'type' }),
+    T({ role: 'hookA', text: c.hookA, x: X, y: vert ? 44 : 46, size: 8.5, style: 'ink', start: 0.7, end: st[1], anim: 'pop' }),
+    T({ role: 'hookB', text: c.hookB, x: X, y: vert ? 50 : 58, size: 8.5, style: 'red', start: 1.15, end: st[1], anim: 'pop' }),
+    T({ role: 'live', text: c.live, x: X - 1, y: vert ? 47 : 50, size: 7.6, style: 'paper', start: st[1] + 0.3, end: st[3], anim: 'pop', rot: -1.5 }),
+    T({ role: 'sticker', text: c.sticker, x: vert ? 66 : 72, y: vert ? 58 : 60, size: 4.2, style: 'sticker', font: 'jost', start: st[3] + 1.2, end: st[4], anim: 'stamp' }),
+    T({ role: 'song0', text: 'DIE HITS. LIVE.', x: X - 1, y: vert ? 34 : 14, size: 6, style: 'ink', start: st[4] + 0.15, end: st[8], anim: 'pop', rot: -1.5 }),
+    T({ role: 'song1', text: 'ROOFTOP', x: X - 1, y: vert ? 40 : 30, size: 11.5, style: 'ink', start: st[5], end: st[8], anim: 'pop', rot: 1.5 }),
+    T({ role: 'song2', text: 'UNFORGETTABLE', x: X - 1, y: vert ? 48 : 48, size: 11.5, style: 'ink', start: st[6], end: st[8], anim: 'pop', rot: -1.5 }),
+    T({ role: 'song3', text: 'LIKE I LOVE YOU', x: X - 1, y: vert ? 56 : 66, size: 11.5, style: 'red', start: st[7], end: st[8], anim: 'pop', rot: 1.5 }),
+    T({ role: 'cta', text: c.cta, x: 50, y: vert ? 6 : 7, size: 7.8, style: 'red', anchor: 'center', start: st[8] + 0.2, end: END, anim: 'pop', rot: -1.5 }),
+    T({ role: 'button', text: c.button, x: 50, y: vert ? 84 : 82, size: 6.6, style: 'ink', anchor: 'center', start: st[8] + 0.5, end: END, anim: 'pop' }),
+  ];
+  const S = (fx, at, o = {}) => ({ id: uid(), fx, at: +at.toFixed(2), ...o });
+  const sfx = [S('beep', 0.05), S('tick', 0.7), S('tick', 1.15), S('riser', st[3]), S('stamp', st[3] + 1.25), S('tick', st[4] + 0.15), S('pop', st[8] + 0.6)];
+  const audio = [{ id: 'music', kind: 'Musik', label: 'Rooftop (Trailer-Ton)', src: 'trailer', offset: 2, at: 0, len: null, vol: 0.9, fadeIn: 0.5, fadeOut: 1, introLow: true }];
+  return { clips, texts, sfx, audio, copy, done: false };
+}
+
+// ---------- audio ----------
+const AUD = { ctx: null };
+function audioInit() {
+  if (AUD.ctx) return AUD.ctx;
+  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+  const ctx = new AC();
+  const lim = ctx.createDynamicsCompressor(); lim.threshold.value = -2; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.002; lim.release.value = 0.1; lim.connect(ctx.destination);
+  const duck = ctx.createGain(); duck.connect(lim);
+  const sfx = ctx.createGain(); sfx.gain.value = 0.7; sfx.connect(lim);
+  const len = ctx.sampleRate * 2, noise = ctx.createBuffer(1, len, ctx.sampleRate), d = noise.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  Object.assign(AUD, { ctx, lim, duck, sfx, noise });
+  return ctx;
+}
+function routeEl(el) {
+  const ctx = AUD.ctx; if (!ctx || ctx.state !== 'running') return null;
+  if (el.__g !== undefined) return el.__g;
+  try {
+    const src = ctx.createMediaElementSource(el), f = (type, fr, q, g) => { const b = ctx.createBiquadFilter(); b.type = type; b.frequency.value = fr; if (q) b.Q.value = q; if (g != null) b.gain.value = g; return b; };
+    const hp = f('highpass', 32, 0.7), mud = f('peaking', 320, 0.9, -2.5), pres = f('peaking', 3200, 0.8, 1.5), air = f('highshelf', 10000, 0, 2);
+    const glue = ctx.createDynamicsCompressor(); glue.threshold.value = -20; glue.knee.value = 10; glue.ratio.value = 2.5; glue.attack.value = 0.02; glue.release.value = 0.25;
+    const g = ctx.createGain(); g.gain.value = 0;
+    src.connect(hp); hp.connect(mud); mud.connect(pres); pres.connect(air); air.connect(glue); glue.connect(g); g.connect(AUD.duck);
+    el.__g = g; return g;
+  } catch (e) { el.__g = null; return null; }
+}
+function playFx(fx, o, bus) {
+  const ctx = AUD.ctx; if (!ctx || ctx.state !== 'running') return;
+  const t = ctx.currentTime, out = AUD.sfx; out.gain.setTargetAtTime(bus, t, 0.02);
+  const G = () => ctx.createGain(), env = (g, t0, a, pk, d) => { g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, pk), t0 + a); g.gain.exponentialRampToValueAtTime(0.0001, t0 + a + d); };
+  const nz = dur => { const s = ctx.createBufferSource(); s.buffer = AUD.noise; s.loop = true; s.start(t, Math.random() * 1.5); s.stop(t + dur + 0.05); return s; };
+  const flt = (type, f, q) => { const b = ctx.createBiquadFilter(); b.type = type; b.frequency.value = f; if (q) b.Q.value = q; return b; };
+  const osc = (f0, f1, dur, t0 = t) => { const o2 = ctx.createOscillator(); o2.frequency.setValueAtTime(f0, t0); if (f1 !== f0) o2.frequency.exponentialRampToValueAtTime(f1, t0 + dur); o2.start(t0); o2.stop(t0 + dur + 0.05); return o2; };
+  const ch = (...n) => { for (let i = 0; i < n.length - 1; i++) n[i].connect(n[i + 1]); };
+  const duck = dp => { AUD.duck.gain.cancelScheduledValues(t); AUD.duck.gain.setTargetAtTime(dp, t, 0.01); AUD.duck.gain.setTargetAtTime(1, t + 0.12, 0.22); };
+  const v = o.v;
+  if (fx === 'whoosh') {
+    const d = o.dur, pk = d * 0.7, bp = flt('bandpass', 350, 1.3), g = G();
+    bp.frequency.setValueAtTime(350, t); bp.frequency.exponentialRampToValueAtTime(3400, t + pk); bp.frequency.exponentialRampToValueAtTime(900, t + d);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + pk); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    let last = g; if (ctx.createStereoPanner) { const p = ctx.createStereoPanner(), dir = o.dir || 1; p.pan.setValueAtTime(-0.6 * dir, t); p.pan.linearRampToValueAtTime(0.6 * dir, t + d); g.connect(p); last = p; }
+    ch(nz(d), bp, g); last.connect(out);
+  } else if (fx === 'impact') {
+    const g = G(); env(g, t, 0.004, v, 0.5); ch(osc(120, 40, 0.4), g, out);
+    const g2 = G(); env(g2, t, 0.002, v * 0.22, 0.09); ch(nz(0.12), flt('highpass', 1800), g2, out); duck(1 - v * 0.45);
+  } else if (fx === 'riser') {
+    const d = o.dur, hp = flt('highpass', 200, 2), g = G();
+    hp.frequency.setValueAtTime(200, t); hp.frequency.exponentialRampToValueAtTime(5500, t + d);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + d); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.04);
+    ch(nz(d + 0.05), hp, g, out);
+  } else if (fx === 'stamp') {
+    const g = G(); env(g, t, 0.003, v, 0.22); ch(osc(95, 45, 0.22), g, out);
+    const g2 = G(); env(g2, t, 0.002, v * 0.4, 0.05); ch(nz(0.08), flt('lowpass', 1300), g2, out); duck(1 - v * 0.35);
+  } else if (fx === 'beep') {
+    [0, 0.15].forEach(dt => { const g = G(); env(g, t + dt, 0.004, v, 0.07); ch(osc(1950, 1950, 0.09, t + dt), g, out); });
+  } else if (fx === 'tick') {
+    const g = G(); env(g, t, 0.001, v, 0.03); ch(nz(0.05), flt('highpass', 3800), g, out);
+  } else if (fx === 'pop') {
+    const g = G(); env(g, t, 0.004, v, 0.13); ch(osc(520, 900, 0.08), g, out);
+  }
+}
+
+class Component extends DCLogic {
+  state = (() => {
+    const def = { view: 'overview', phase: 'ankuendigung', fmt: 'reel', ads: {}, zoom: 46, showSafe: true, ki: { len: 15, style: 'energie' }, sfxVol: 0.7, mute: {}, solo: null, assetTab: 'clips' };
+    let s = def; try { const j = JSON.parse(localStorage.getItem('ns-ad-studio-v1') || 'null'); if (j) s = { ...def, ...j }; } catch (e) {}
+    return { ...s, sel: null, t: 0, playing: false, thumbs: {}, trailerURL: null, peaks: {}, uploads: [], toast: '', kiBusy: false };
+  })();
+  slot0 = React.createRef(); slot1 = React.createRef(); vid0 = React.createRef(); vid1 = React.createRef(); img0 = React.createRef(); img1 = React.createRef();
+  stageBox = React.createRef(); editorRef = React.createRef(); ovRef = React.createRef(); canvasRef = React.createRef(); tlScroll = React.createRef(); fileInput = React.createRef(); textArea = React.createRef();
+  aud = {}; tNow = 0; drag = null; dnd = null;
+
+  componentDidMount() {
+    this.onMove = e => this.handleMove(e); this.onUp = () => this.handleUp();
+    this.onKey = e => {
+      const tag = (e.target.tagName || '').toLowerCase(); if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+      if (e.code === 'Space') { e.preventDefault(); this.togglePlay(); }
+      else if ((e.key === 'Delete' || e.key === 'Backspace') && this.state.sel) { e.preventDefault(); this.delSel(); }
+    };
+    this.ro = new ResizeObserver(() => requestAnimationFrame(() => this.measure())); this.onResize = () => this.measure(); window.addEventListener('resize', this.onResize); this.measure();
+    window.addEventListener('pointermove', this.onMove); window.addEventListener('pointerup', this.onUp); window.addEventListener('keydown', this.onKey);
+    fetch(SRC).then(r => r.blob()).then(async b => {
+      const url = URL.createObjectURL(b); this.setState({ trailerURL: url }, () => this.applyVideo(this.tNow));
+      this.makeThumbs(url);
+      try { const buf = await b.arrayBuffer(); this.decodePeaks('trailer', buf); } catch (e) {}
+    }).catch(() => this.setState({ trailerURL: SRC }));
+  }
+  componentWillUnmount() {
+    this.ro && this.ro.disconnect(); window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('pointermove', this.onMove); window.removeEventListener('pointerup', this.onUp); window.removeEventListener('keydown', this.onKey);
+    cancelAnimationFrame(this.raf); Object.values(this.aud).forEach(a => a.pause());
+  }
+  measure() {
+    const b = this.stageBox.current, ed = this.editorRef.current;
+    if (b && this.observed !== b) { this.ro.disconnect(); this.ro.observe(b); this.observed = b; }
+    const box = b ? { w: b.clientWidth, h: b.clientHeight } : null;
+    const top = ed ? ed.getBoundingClientRect().top + window.scrollY : 80;
+    const edH = Math.max(860, window.innerHeight - top);
+    const boxChanged = box && (!this.box || Math.abs(box.w - this.box.w) > 1 || Math.abs(box.h - this.box.h) > 1);
+    if (box) this.box = box;
+    if (this.state.edH !== edH || boxChanged) { cancelAnimationFrame(this.mr); this.mr = requestAnimationFrame(() => { if (this.state.edH !== edH) this.setState({ edH }); else this.forceUpdate(); }); }
+  }
+  componentDidUpdate() {
+    if (this.stageBox.current !== this.observed || this.lastView !== this.state.view) { this.lastView = this.state.view; requestAnimationFrame(() => this.measure()); }
+    if (!this.state.playing) this.applyVideo(this.tNow);
+    if (this.focusText && this.textArea.current) { this.textArea.current.focus(); this.textArea.current.select(); this.focusText = false; }
+  }
+  async makeThumbs(url) { try { await this._thumbs(url); } catch (e) {} }
+  async _thumbs(url) {
+    const v = document.createElement('video'); v.muted = true; v.src = url; v.preload = 'auto';
+    try { await new Promise((r, j) => { v.onloadeddata = r; v.onerror = j; }); } catch (e) { return; }
+    const c = document.createElement('canvas'); c.width = 90; c.height = 160; const x = c.getContext('2d'); const out = {};
+    for (const [k, s] of Object.entries(SHOTS)) {
+      v.currentTime = k === 'full' ? 3 : (s[0] + s[1]) / 2;
+      await new Promise(r => { v.onseeked = r; setTimeout(r, 2500); });
+      x.drawImage(v, 0, 0, 90, 160); out[k] = c.toDataURL('image/jpeg', 0.7);
+    }
+    this.setState({ thumbs: out });
+  }
+  decodePeaks(key, buf) {
+    const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext; if (!OAC) return;
+    new OAC(1, 44100, 44100).decodeAudioData(buf).then(ab => {
+      const d = ab.getChannelData(0), step = Math.floor(ab.sampleRate / 50), out = [];
+      for (let i = 0; i < d.length; i += step) { let m = 0; for (let j = i; j < i + step && j < d.length; j += 8) m = Math.max(m, Math.abs(d[j])); out.push(m); }
+      this.setState(s => ({ peaks: { ...s.peaks, [key]: out } }));
+    }).catch(() => {});
+  }
+
+  key() { return this.state.phase + ':' + this.state.fmt; }
+  fmt() { return FORMATS.find(f => f.id === this.state.fmt) || FORMATS[0]; }
+  adFor(ph, f) { const k = ph + ':' + f; if (!this.state.ads[k]) this.state.ads[k] = buildAd(ph, f); return this.state.ads[k]; }
+  ad() { return this.adFor(this.state.phase, this.state.fmt); }
+  total(ad = this.ad()) { return ad.clips.reduce((a, c) => a + c.dur, 0) || 1; }
+  persist() {
+    clearTimeout(this.pt); this.pt = setTimeout(() => {
+      const { view, phase, fmt, ads, zoom, showSafe, ki, sfxVol, mute, solo, assetTab } = this.state;
+      try { localStorage.setItem('ns-ad-studio-v1', JSON.stringify({ view, phase, fmt, ads, zoom, showSafe, ki, sfxVol, mute, solo, assetTab })); } catch (e) {}
+    }, 300);
+  }
+  mutate(fn, save = true) {
+    const k = this.key(), a = JSON.parse(JSON.stringify(this.ad())); fn(a);
+    this.setState(s => ({ ads: { ...s.ads, [k]: a } }), () => save && this.persist());
+  }
+  set(patch) { this.setState(patch, () => this.persist()); }
+  showToast(msg) { clearTimeout(this.tt); this.setState({ toast: msg }); this.tt = setTimeout(() => this.setState({ toast: '' }), 3800); }
+
+  asset(id) {
+    if (!id) return null; const [k, n] = id.split(':');
+    if (k === 'shot') { const s = SHOTS[n]; return s && { kind: 'clip', src: this.state.trailerURL, in: s[0], len: s[1] - s[0], label: s[2], thumb: this.state.thumbs[n] || '' }; }
+    if (k === 'img') { const s = IMGS[n]; return s && { kind: 'image', src: s[0], in: 0, len: 99, label: s[1], thumb: s[0] }; }
+    if (k === 'up') { const u = this.state.uploads.find(x => x.id === n); return u ? { ...u } : null; }
+    return null;
+  }
+  speedOf(c, A) { if (!A || A.kind !== 'clip') return 1; return c.speed === 'auto' ? clamp(A.len / Math.max(0.1, c.dur), 0.35, 2.5) : +c.speed; }
+  allSfx(ad = this.ad()) {
+    const st = starts(ad.clips), out = ad.sfx.map(s => ({ ...s }));
+    ad.clips.forEach((c, i) => { if (!i || c.link === false) return; const tr = TR[c.trans]; if (!tr || !tr[2]) return; out.push({ id: 'L' + c.id, fx: tr[2], at: st[i], linked: c.id, dir: c.trans === 'whipL' ? -1 : 1 }); });
+    return out;
+  }
+
+  // ---------- playback ----------
+  togglePlay() { this.state.playing ? this.pause() : this.play(); }
+  play() {
+    if (this.fmt().kind !== 'video') return;
+    const ctx = audioInit(); if (ctx && ctx.state !== 'running') ctx.resume().catch(() => {});
+    if (this.tNow >= this.total() - 0.05) this.tNow = 0;
+    this.setState({ playing: true }, () => { this.last = performance.now(); cancelAnimationFrame(this.raf); this.raf = requestAnimationFrame(this.tick); });
+  }
+  pause() { cancelAnimationFrame(this.raf); this.setState({ playing: false }, () => { this.applyVideo(this.tNow); this.syncAudio(this.tNow, false); }); }
+  seek(t) { this.tNow = clamp(t, 0, this.total()); this.setState({ t: this.tNow }); this.applyVideo(this.tNow); this.syncAudio(this.tNow, this.state.playing); }
+  tick = now => {
+    if (!this.state.playing) return;
+    const dt = Math.min(0.1, (now - this.last) / 1000); this.last = now;
+    let p = this.tNow, t = p + dt; const total = this.total();
+    if (t >= total) { t = 0; p = -1; }
+    this.tNow = t; this.fireSfx(p, t); this.applyVideo(t); this.syncAudio(t, true);
+    this.setState({ t }); this.raf = requestAnimationFrame(this.tick);
+  };
+  sfxAudible() { const s = this.state; return !s.mute.sfx && (!s.solo || s.solo === 'sfx'); }
+  fireSfx(p, t) {
+    if (!this.sfxAudible()) return;
+    for (const s of this.allSfx()) {
+      const d = FXDEF[s.fx]; if (!d) continue; const st = Math.max(0, s.at - d[3]);
+      if (st > p && st <= t) playFx(s.fx, { dur: d[2], v: s.v ?? d[4], dir: s.dir }, this.state.sfxVol);
+    }
+  }
+  syncAudio(t, playing) {
+    const F = this.fmt(), ad = this.ad(), total = this.total(), s = this.state, ids = new Set();
+    if (F.kind === 'video') ad.audio.forEach(a => {
+      ids.add(a.id);
+      const src = a.src === 'trailer' ? s.trailerURL : (s.uploads.find(u => u.id === a.src) || {}).src; if (!src) return;
+      let el = this.aud[a.id]; if (!el) { el = new Audio(); el.preload = 'auto'; this.aud[a.id] = el; }
+      if (el.__src !== src) { el.src = src; el.__src = src; }
+      const g = routeEl(el), len = a.len ?? total, on = playing && t >= a.at && t < a.at + len;
+      const muted = s.mute[a.id] || (s.solo && s.solo !== a.id);
+      const x = t - a.at, fi = a.fadeIn > 0 ? clamp(x / a.fadeIn) : 1, fo = a.fadeOut > 0 ? clamp((len - x) / a.fadeOut) : 1;
+      const st = starts(ad.clips), s1 = st[1] ?? 99, il = a.introLow ? (x < s1 - 0.2 ? 0.4 : x > s1 + 0.3 ? 1 : 0.4 + 0.6 * (x - (s1 - 0.2)) / 0.5) : 1;
+      const lvl = muted ? 0 : a.vol * fi * fo * il;
+      if (g) { el.volume = 1; g.gain.setTargetAtTime(on ? lvl : 0, AUD.ctx.currentTime, 0.04); } else el.volume = clamp(lvl);
+      const target = a.offset + clamp(x, 0, len);
+      if (!on) { if (!el.paused) el.pause(); if (el.readyState >= 1 && Math.abs(el.currentTime - target) > 0.05) el.currentTime = target; return; }
+      const d = target - el.currentTime;
+      if (el.paused) { if (Math.abs(d) > 0.05) el.currentTime = target; el.play().catch(() => {}); return; }
+      if (Math.abs(d) > 0.5) { el.currentTime = target; el.playbackRate = 1; }
+      else if (Math.abs(d) > 0.04) el.playbackRate = 1 + clamp(d * 0.5, -0.05, 0.05);
+      else if (el.playbackRate !== 1) el.playbackRate = 1;
+    });
+    Object.keys(this.aud).forEach(id => { if (!ids.has(id) && !this.aud[id].paused) this.aud[id].pause(); });
+  }
+  drive(slot, clip, local, show) {
+    if (!slot.v) return;
+    if (!clip) { if (!slot.v.paused) slot.v.pause(); return; }
+    const A = this.asset(clip.asset); if (!A) { slot.v.style.display = 'none'; slot.im.style.display = 'none'; return; }
+    if (A.kind === 'image') {
+      slot.v.style.display = 'none'; if (!slot.v.paused) slot.v.pause();
+      slot.im.style.display = 'block'; if (slot.im.getAttribute('src') !== A.src) slot.im.setAttribute('src', A.src); return;
+    }
+    slot.im.style.display = 'none'; slot.v.style.display = 'block';
+    if (!A.src) return;
+    if (slot.v.__src !== A.src) { slot.v.muted = true; slot.v.src = A.src; slot.v.__src = A.src; }
+    const sp = this.speedOf(clip, A), target = A.in + clamp(local, 0, clip.dur + 0.6) * sp;
+    if (this.state.playing && show) {
+      if (Math.abs(slot.v.playbackRate - sp) > 0.01) slot.v.playbackRate = sp;
+      if (slot.v.paused) slot.v.play().catch(() => {});
+      if (Math.abs(slot.v.currentTime - target) > 0.25) slot.v.currentTime = target;
+    } else {
+      if (!slot.v.paused) slot.v.pause();
+      if (slot.v.readyState >= 1 && Math.abs(slot.v.currentTime - target) > 0.03) slot.v.currentTime = target;
+    }
+  }
+  applyVideo(t) {
+    if (this.fmt().kind !== 'video') return;
+    const slots = [0, 1].map(n => ({ s: this['slot' + n].current, v: this['vid' + n].current, im: this['img' + n].current })), ov = this.ovRef.current;
+    if (!slots[0].s || !ov) return;
+    const clips = this.ad().clips; if (!clips.length) { slots.forEach(x => x.s.style.opacity = 0); return; }
+    const st = starts(clips); let i = clips.length - 1;
+    for (let k = 0; k < clips.length; k++) if (t < st[k] + clips[k].dur) { i = k; break; }
+    const c = clips[i], local = t - st[i], tr = TR[c.trans] || TR.cut, td = i > 0 ? tr[1] : 0, inTr = td > 0 && local < td;
+    const p = inTr ? local / td : 1, e = easeOut(p), sc = (this.cvScale || 0.3) * 1080 / 1080;
+    const cur = slots[i % 2], oth = slots[(i + 1) % 2];
+    this.drive(cur, c, local, true);
+    if (inTr) this.drive(oth, clips[i - 1], clips[i - 1].dur + local, true);
+    else if (clips[i + 1]) this.drive(oth, clips[i + 1], 0, false);
+    const kb = 1 + 0.05 * clamp(local / Math.max(0.5, c.dur));
+    const S = (el, o) => { el.style.opacity = o.op ?? 1; el.style.transform = o.tf || 'none'; el.style.filter = o.f || 'none'; el.style.clipPath = o.cp || 'none'; el.style.zIndex = o.z ?? 1; };
+    let C = { op: 1, tf: `scale(${kb})`, z: 2 }, O = { op: 0, z: 1 }, V = { op: 0, bg: 'transparent' };
+    if (inTr) {
+      const pk = clips[i - 1].dur + local, pkb = 1 + 0.05 * clamp(pk / Math.max(0.5, clips[i - 1].dur));
+      O = { op: 1, tf: `scale(${pkb})`, z: 1 };
+      const bl = n => `blur(${(n * sc * 3).toFixed(2)}px)`;
+      switch (c.trans) {
+        case 'flash': V = { op: 0.72 * (1 - e), bg: '#fff8ec' }; break;
+        case 'whipR': case 'whipL': { const dir = c.trans === 'whipR' ? 1 : -1;
+          C = { op: Math.min(1, local / 0.12), tf: `translateX(${dir * 10 * (1 - e)}%) scale(${kb * (1 + 0.08 * (1 - e))})`, f: bl(14 * (1 - e)), z: 2 };
+          O = { op: 1, tf: `translateX(${-dir * 6 * e}%) scale(${pkb * (1 + 0.05 * e)})`, f: bl(10 * e), z: 1 }; break; }
+        case 'xfade': O = { op: 1 - p, tf: `scale(${pkb})`, z: 3 }; break;
+        case 'zoom': C = { op: 1, tf: `scale(${kb * (1.3 - 0.3 * e)})`, f: bl(10 * (1 - e)), z: 2 }; V = { op: 0.3 * (1 - e), bg: '#fff8ec' }; O.op = 0; break;
+        case 'wipe': C = { op: 1, tf: `scale(${kb})`, cp: `inset(0 ${(100 * (1 - e)).toFixed(2)}% 0 0)`, z: 2 }; break;
+        case 'glitch': { const j = Math.sin(local * 97) * (1 - p);
+          C = { op: 1, tf: `translateX(${j * 4}%) scale(${kb * 1.02})`, f: `hue-rotate(${Math.round(j * 120)}deg) saturate(${1 + (1 - p)}) contrast(${1 + 0.4 * (1 - p)})`, z: 2 };
+          V = { op: 0.55 * (1 - p), bg: 'repeating-linear-gradient(0deg,rgba(255,0,80,.35) 0 3px,rgba(0,255,220,.25) 3px 6px,transparent 6px 11px)' }; break; }
+        case 'dip': if (p < 0.5) { O.z = 3; V = { op: 2 * p, bg: '#000' }; } else { O.op = 0; V = { op: 2 * (1 - p), bg: '#000' }; } break;
+      }
+    }
+    S(cur.s, C); S(oth.s, O); ov.style.opacity = V.op; ov.style.background = V.bg;
+  }
+
+  // ---------- drag ----------
+  handleMove(e) {
+    const d = this.drag; if (!d) return;
+    const dx = e.clientX - d.x0, dy = e.clientY - d.y0, pps = this.state.zoom;
+    if (Math.abs(dx) + Math.abs(dy) > 2) d.moved = true;
+    if (d.kind === 'scrub') { const r = this.tlScroll.current; if (!r) return; const rect = r.getBoundingClientRect(); this.seek((e.clientX - rect.left + r.scrollLeft) / pps); return; }
+    this.mutate(a => {
+      if (d.kind === 'text') { const tb = a.texts.find(x => x.id === d.id); if (tb) { tb.x = +(d.ox + dx / d.cw * 100).toFixed(2); tb.y = +(d.oy + dy / d.ch * 100).toFixed(2); } }
+      else if (d.kind === 'clipR') { const c = a.clips.find(x => x.id === d.id); if (c) c.dur = +Math.max(0.3, d.o + dx / pps).toFixed(2); }
+      else if (d.kind === 'tText') { const tb = a.texts.find(x => x.id === d.id); if (tb) { const sh = Math.max(-d.os, dx / pps); tb.start = +(d.os + sh).toFixed(2); tb.end = +(d.oe + sh).toFixed(2); } }
+      else if (d.kind === 'tTextR') { const tb = a.texts.find(x => x.id === d.id); if (tb) tb.end = +Math.max(tb.start + 0.2, d.oe + dx / pps).toFixed(2); }
+      else if (d.kind === 'sfx') { const s = a.sfx.find(x => x.id === d.id); if (s) s.at = +Math.max(0, d.o + dx / pps).toFixed(2); }
+      else if (d.kind === 'aud') { const s = a.audio.find(x => x.id === d.id); if (s) s.offset = +Math.max(0, d.o - dx / pps).toFixed(2); }
+    }, false);
+  }
+  handleUp() { if (this.drag) { this.drag = null; this.persist(); } }
+  startDrag(e, o) { e.stopPropagation(); this.drag = { x0: e.clientX, y0: e.clientY, ...o }; }
+  select(sel) { this.setState({ sel }); }
+
+  // ---------- edit ops ----------
+  selItem() {
+    const s = this.state.sel, a = this.ad(); if (!s) return null;
+    const list = s.type === 'text' ? a.texts : s.type === 'clip' ? a.clips : s.type === 'sfx' ? a.sfx : s.type === 'audio' ? a.audio : [];
+    return list.find(x => x.id === s.id) || null;
+  }
+  updSel(patch) {
+    const s = this.state.sel; if (!s) return;
+    const key = { text: 'texts', clip: 'clips', sfx: 'sfx', audio: 'audio' }[s.type];
+    this.mutate(a => { const it = a[key].find(x => x.id === s.id); if (it) Object.assign(it, patch); });
+  }
+  delSel() {
+    const s = this.state.sel; if (!s) return;
+    const key = { text: 'texts', clip: 'clips', sfx: 'sfx', audio: 'audio' }[s.type];
+    this.mutate(a => { a[key] = a[key].filter(x => x.id !== s.id); }); this.setState({ sel: null });
+  }
+  insertClip(assetId, idx) {
+    const A = this.asset(assetId); if (!A) return;
+    if (this.fmt().kind === 'image') { if (A.kind === 'image') this.mutate(a => { a.bg = assetId; }); else this.showToast('Bild-Formate brauchen ein Bild als Hintergrund.'); return; }
+    const c = { id: uid(), asset: assetId, dur: A.kind === 'image' ? 2.5 : +clamp(A.len, 0.6, assetId === 'shot:full' ? 4 : 3).toFixed(2), speed: assetId.startsWith('shot:') && assetId !== 'shot:full' ? 'auto' : '1', trans: 'flash', link: true };
+    this.mutate(a => { const i = idx == null ? a.clips.length : idx; if (!a.clips.length) c.trans = 'cut'; a.clips.splice(i, 0, c); });
+    this.setState({ sel: { type: 'clip', id: c.id } });
+  }
+  addSfx(fx, at) { const id = uid(); this.mutate(a => { a.sfx.push({ id, fx, at: +at.toFixed(2) }); }); this.setState({ sel: { type: 'sfx', id } }); playFx(fx, { dur: FXDEF[fx][2], v: FXDEF[fx][4], dir: 1 }, this.state.sfxVol); }
+  addAudio(srcId, label, at = 0) {
+    const id = uid(); this.mutate(a => { a.audio.push({ id, kind: 'Audio', label, src: srcId, offset: 0, at, len: null, vol: 0.9, fadeIn: 0.2, fadeOut: 0.5, introLow: false }); });
+    this.setState({ sel: { type: 'audio', id } });
+  }
+  dropAsset(id, ctxKind, x) {
+    if (!id) return; const pps = this.state.zoom;
+    if (id.startsWith('fx:')) { this.addSfx(id.slice(3), ctxKind === 'sfx' && x != null ? x / pps : this.tNow); return; }
+    if (id === 'aud:trailer') { this.addAudio('trailer', 'Trailer-Ton', ctxKind === 'audio' && x != null ? x / pps : 0); return; }
+    if (id.startsWith('aud:')) { const u = this.state.uploads.find(q => q.id === id.slice(4)); if (u) this.addAudio(u.id, u.label, ctxKind === 'audio' && x != null ? x / pps : 0); return; }
+    if (id.startsWith('clipmove:')) {
+      const cid = id.slice(9), tt = x / pps;
+      this.mutate(a => { const from = a.clips.findIndex(c => c.id === cid); if (from < 0) return; const [c] = a.clips.splice(from, 1); const st = starts(a.clips); let idx = a.clips.length; for (let i = 0; i < a.clips.length; i++) if (st[i] + a.clips[i].dur / 2 > tt) { idx = i; break; } a.clips.splice(idx, 0, c); if (a.clips[0]) a.clips[0].trans = 'cut'; });
+      return;
+    }
+    if (ctxKind === 'video' && x != null) { const a = this.ad(), st = starts(a.clips), tt = x / pps; let idx = a.clips.length; for (let i = 0; i < a.clips.length; i++) if (st[i] + a.clips[i].dur / 2 > tt) { idx = i; break; } this.insertClip(id, idx); return; }
+    this.insertClip(id);
+  }
+  onFiles(e) {
+    const files = Array.from(e.target.files || []); e.target.value = '';
+    files.forEach(f => {
+      const url = URL.createObjectURL(f), id = uid(), kind = f.type.startsWith('image') ? 'image' : f.type.startsWith('video') ? 'clip' : f.type.startsWith('audio') ? 'audio' : null;
+      if (!kind) return;
+      const up = { id, kind, src: url, label: f.name.replace(/\.[^.]+$/, ''), in: 0, len: 3, thumb: kind === 'image' ? url : '' };
+      this.setState(s => ({ uploads: [...s.uploads, up], assetTab: kind === 'audio' ? 'audio' : kind === 'image' ? 'images' : 'clips' }));
+      if (kind === 'clip') {
+        const v = document.createElement('video'); v.muted = true; v.src = url;
+        v.onloadeddata = () => { up.len = v.duration || 3; v.currentTime = Math.min(1, up.len / 2); };
+        v.onseeked = () => { const c = document.createElement('canvas'); c.width = 90; c.height = 160; const r = v.videoWidth / v.videoHeight, w = 160 * r; c.getContext('2d').drawImage(v, (90 - w) / 2, 0, w, 160); up.thumb = c.toDataURL('image/jpeg', 0.7); this.forceUpdate(); };
+      }
+      if (kind === 'audio') { const el = new Audio(url); el.onloadedmetadata = () => { up.len = el.duration; this.forceUpdate(); }; f.arrayBuffer().then(b => this.decodePeaks(id, b)); }
+    });
+    this.showToast(files.length + ' Datei(en) hinzugefügt – nur in dieser Sitzung verfügbar.');
+  }
+  async kiTexts() {
+    if (!window.claude || !window.claude.complete) { this.showToast('KI-Textvorschlag ist hier nicht verfügbar.'); return; }
+    const P = PHASES.find(p => p.id === this.state.phase), F = this.fmt();
+    this.setState({ kiBusy: true });
+    try {
+      const prompt = `Du schreibst deutsche Werbetexte für eine Paid-Social-Anzeige.\nKonzert: Nico Santos live, "POV: SUMMER TOUR 2027", Finale des Festivals Sommerrausch, Sonntag 27.06.2027, 19 Uhr, Seegarten Amorbach. Bekannte Songs: Rooftop, Unforgettable, Like I Love You.\nKampagnenphase: ${P.label} (${P.time}). Format: ${F.label} (${F.net}).\nRegeln: Einblendungen in GROSSBUCHSTABEN, je max. 24 Zeichen, POV-Perspektive, keine erfundenen Fakten (keine Preise, keine Ausverkauft-Behauptung). Primärtext max. 300 Zeichen mit 1–2 Emojis, Überschrift max. 40 Zeichen.\nAntworte NUR mit JSON: {"hookA":"","hookB":"","live":"","cta":"","button":"","sticker":"","primary":"","headline":"","desc":""}`;
+      const r = await window.claude.complete(prompt);
+      const j = JSON.parse(r.slice(r.indexOf('{'), r.lastIndexOf('}') + 1));
+      this.mutate(a => {
+        a.texts.forEach(tb => { if (tb.role && j[tb.role]) tb.text = tb.role === 'button' && !/>>/.test(j.button) ? j.button + ' >>' : j[tb.role]; });
+        ['primary', 'headline', 'desc'].forEach(k => { if (j[k]) a.copy[k] = j[k]; });
+      });
+      this.showToast('Neue Texte eingesetzt – alles bleibt editierbar.');
+    } catch (e) { this.showToast('Textvorschlag fehlgeschlagen – bitte erneut versuchen.'); }
+    this.setState({ kiBusy: false });
+  }
+  exportBrief() {
+    const a = this.ad(), F = this.fmt(), P = PHASES.find(p => p.id === this.state.phase), st = starts(a.clips);
+    const brief = { auftrag: 'Ad final schneiden & exportieren', kampagne: 'Nico Santos · Sommerrausch-Finale 27.06.2027', phase: P.label, format: `${F.label} · ${F.net} · ${F.w}×${F.h}`, dauer_s: +this.total().toFixed(2),
+      schnitt: a.clips.map((c, i) => ({ start: +st[i].toFixed(2), dauer: c.dur, asset: (this.asset(c.asset) || {}).label || c.asset, tempo: c.speed, uebergang: TR[c.trans] ? TR[c.trans][0] : c.trans })),
+      texte: a.texts.map(tb => ({ text: tb.text, stil: tb.style, x_pct: tb.x, y_pct: tb.y, groesse: tb.size, ein: tb.start, aus: tb.end, animation: tb.anim })),
+      audio: a.audio.map(x => ({ spur: x.label, lautstaerke: x.vol, start_in_quelle: x.offset, beginn: x.at, fade_in: x.fadeIn, fade_out: x.fadeOut })),
+      effekte: this.allSfx(a).map(s => ({ typ: FXDEF[s.fx][0], zeit: s.at, gekoppelt: !!s.linked })), copy: a.copy };
+    const txt = 'Bitte setze diesen Ad-Auftrag um:\n```json\n' + JSON.stringify(brief, null, 2) + '\n```';
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => this.showToast('Auftrag kopiert – im Chat einfügen, Claude setzt Schnitt & Export um.')).catch(() => this.showToast('Kopieren nicht möglich.'));
+  }
+
+  // ---------- view helpers ----------
+  textView(tb, F, sc, t, live, selId, total) {
+    const S = TSTYLE[tb.style] || TSTYLE.ink, base = tb.size / 100 * Math.min(F.w, F.h) * sc;
+    let op = 1, s = 1, ty = 0, text = tb.text;
+    if (live) {
+      const tt = t - tb.start, out = tb.end - t;
+      if (tt < 0 || out < 0) { if (tb.id !== selId) return null; op = 0.3; }
+      else {
+        if (tb.anim === 'pop') { const p = easeOutBack(clamp(tt / 0.3)); op = clamp(p); s = 0.6 + 0.4 * p; }
+        else if (tb.anim === 'fade') op = clamp(tt / 0.35);
+        else if (tb.anim === 'slide') { const e = easeOut(clamp(tt / 0.35)); op = e; ty = (1 - e) * 60; }
+        else if (tb.anim === 'type') text = text.slice(0, Math.floor(tt * 14));
+        else if (tb.anim === 'stamp') { const e = clamp(tt / 0.25); s = 1.6 - 0.6 * easeOut(e); op = e; }
+        if (out < 0.25 && tb.end < total - 0.02) { const o = 1 - out / 0.25; op *= 1 - o; s *= 1 + 0.3 * o; }
+      }
+    }
+    const ctr = tb.anchor === 'center';
+    return { id: tb.id, text: text || ' ', left: tb.x + '%', top: tb.y + '%', fs: base.toFixed(2) + 'px', ff: tb.font === 'jost' ? "'Jost',sans-serif" : "'VT323',monospace", fw: tb.font === 'jost' ? 600 : 400,
+      bg: S[1], color: S[2], pad: `${(base * 0.1).toFixed(1)}px ${(base * 0.24).toFixed(1)}px ${(base * 0.05).toFixed(1)}px`, shadow: tb.style === 'white' ? '0 3px 14px rgba(0,0,0,.55)' : 'none',
+      tf: `translate(${ctr ? -50 : 0}%, ${ty}%) rotate(${(tb.rot || 0) + S[3]}deg) scale(${s.toFixed(3)})`, origin: ctr ? '50% 50%' : '0 50%', align: tb.style === 'sticker' || ctr ? 'center' : 'left',
+      op: op.toFixed(3), outline: tb.id === selId ? '2px dashed #4da3ff' : 'none' };
+  }
+
+  renderVals() {
+    const s = this.state, F = this.fmt(), ad = this.ad(), total = this.total(ad), isVideo = F.kind === 'video', P = PHASES.find(p => p.id === s.phase) || PHASES[1];
+    const t = s.t, sel = s.sel, selId = sel && sel.id, pps = s.zoom, ink = '#2b2a29', paper = '#ede6d8';
+    const act = (on) => ({ bg: on ? ink : 'transparent', fg: on ? paper : ink });
+    const dact = (on) => ({ bg: on ? paper : 'transparent', fg: on ? ink : paper });
+
+    const phasesV = PHASES.map(p => ({ label: p.label, time: p.time, ...act(p.id === s.phase), onClick: () => { this.pause(); this.tNow = 0; this.set({ phase: p.id, sel: null, t: 0 }); } }));
+    const bx = this.box || { w: 340, h: 420 }, cvScale = Math.max(0.05, Math.min((bx.w - 8) / F.w, (bx.h - 8) / F.h, 2.2)); this.cvScale = cvScale;
+    const cw = F.w * cvScale, ch = F.h * cvScale;
+    const cvTexts = ad.texts.map(tb => this.textView(tb, F, cvScale, t, isVideo, selId, total)).filter(Boolean).map(v => ({ ...v,
+      down: e => { this.select({ type: 'text', id: v.id }); const tb = this.ad().texts.find(x => x.id === v.id); this.startDrag(e, { kind: 'text', id: v.id, ox: tb.x, oy: tb.y, cw, ch }); },
+      dbl: () => { this.focusText = true; this.select({ type: 'text', id: v.id }); this.forceUpdate(); } }));
+
+    const overview = FORMATS.map(f => {
+      const a = this.adFor(s.phase, f.id), sc = Math.min(220 / f.w, 230 / f.h), vid = f.kind === 'video';
+      const st = starts(a.clips), tt = vid ? 1.6 : 0, first = vid ? this.asset((a.clips[0] || {}).asset) : this.asset(a.bg);
+      const texts = a.texts.filter(x => !vid || (x.start <= tt && x.end > tt)).map(x => this.textView(x, f, sc, 0, false, null, 1));
+      const tot = a.clips.reduce((q, c) => q + c.dur, 0);
+      return { label: f.label, net: f.net, size: `${f.w}×${f.h}`, mw: (f.w * sc).toFixed(1) + 'px', mh: (f.h * sc).toFixed(1) + 'px', bg: first && first.thumb ? first.thumb : '', texts,
+        status: a.done ? 'Freigegeben' : 'Entwurf', stBg: a.done ? '#2b7a4b' : '#e2dccf', stFg: a.done ? '#fff' : ink,
+        meta: vid ? `Video · ${tot.toFixed(1)} s · ${a.clips.length} Clips · ${a.texts.length} Texte · ${a.sfx.length + a.clips.filter((c, i) => i && c.link !== false && TR[c.trans] && TR[c.trans][2]).length} Sounds` : `Bild · ${a.texts.length} Text-Elemente`,
+        open: () => { this.tNow = 0; this.set({ fmt: f.id, view: 'editor', sel: null, t: 0 }); } };
+    });
+
+    const formatsV = FORMATS.map(f => { const r = Math.max(f.w, f.h); return { label: f.label, net: f.net, ratio: f.ratio, rw: (22 * f.w / r).toFixed(1) + 'px', rh: (22 * f.h / r).toFixed(1) + 'px', ...act(f.id === s.fmt), onClick: () => { this.pause(); this.tNow = 0; this.set({ fmt: f.id, sel: null, t: 0 }); } }; });
+    const tabs = [['clips', 'Clips'], ['images', 'Bilder'], ['audio', 'Audio'], ['fx', 'Effekte']];
+    const assetTabs = tabs.map(([id, label]) => ({ label, ...act(s.assetTab === id), onClick: () => this.set({ assetTab: id }) }));
+    let items = [];
+    if (s.assetTab === 'clips') items = [...Object.entries(SHOTS).map(([k, v]) => ({ id: 'shot:' + k, label: v[2], thumb: s.thumbs[k] || '', badge: (v[1] - v[0]).toFixed(1) + 's', ar: '9/16' })), ...s.uploads.filter(u => u.kind === 'clip').map(u => ({ id: 'up:' + u.id, label: u.label, thumb: u.thumb, badge: 'UPLOAD', ar: '9/16' }))];
+    else if (s.assetTab === 'images') items = [...Object.entries(IMGS).map(([k, v]) => ({ id: 'img:' + k, label: v[1], thumb: v[0], badge: 'BILD', ar: v[2] })), ...s.uploads.filter(u => u.kind === 'image').map(u => ({ id: 'up:' + u.id, label: u.label, thumb: u.thumb, badge: 'UPLOAD', ar: '1/1' }))];
+    else if (s.assetTab === 'audio') items = [{ id: 'aud:trailer', label: 'Trailer-Ton (Rooftop)', thumb: '', badge: '30s', ar: '2/1', color: '#3f6b66' }, ...s.uploads.filter(u => u.kind === 'audio').map(u => ({ id: 'aud:' + u.id, label: u.label, thumb: '', badge: (u.len || 0).toFixed(0) + 's', ar: '2/1', color: '#3f6b66' }))];
+    else items = Object.entries(FXDEF).map(([k, v]) => ({ id: 'fx:' + k, label: v[0], thumb: '', badge: 'SFX', ar: '2/1', color: v[1] }));
+    const assetsV = items.map(it => ({ ...it, color: it.color || '#3f5a66', hint: 'Ziehen oder klicken zum Hinzufügen',
+      drag: e => { this.dnd = it.id; try { e.dataTransfer.setData('text/plain', it.id); e.dataTransfer.effectAllowed = 'copy'; } catch (x) {} },
+      add: () => this.dropAsset(it.id, null, null) }));
+    const assetHint = s.assetTab === 'fx' ? 'Klick = an Abspielposition einfügen und anhören. Ziehen = auf die Effekt-Spur legen.' : s.assetTab === 'audio' ? 'Audio auf eine Tonspur ziehen = neue Spur. Eigene Songs/Voiceover über „Hochladen“.' : isVideo ? 'Klick = ans Ende der Timeline. Ziehen = an beliebige Stelle der Video-Spur.' : 'Bild auf den Canvas ziehen = neuer Hintergrund.';
+
+    const getDrop = e => { e.preventDefault(); let id = this.dnd; try { id = e.dataTransfer.getData('text/plain') || id; } catch (x) {} this.dnd = null; return id; };
+    const xIn = e => { const r = e.currentTarget.getBoundingClientRect(); return e.clientX - r.left; };
+
+    // timeline
+    const st = starts(ad.clips);
+    const clipsV = ad.clips.map((c, i) => { const A = this.asset(c.asset), tr = TR[c.trans] || TR.cut; return {
+      left: (st[i] * pps) + 'px', width: Math.max(8, c.dur * pps - 2) + 'px', thumb: A ? A.thumb : '', label: A ? A.label : 'Fehlt (Upload)', durLabel: c.dur.toFixed(1) + 's', color: A && A.kind === 'image' ? '#5a5047' : '#3f5a66',
+      outline: sel && sel.type === 'clip' && sel.id === c.id ? '2px solid #4da3ff' : 'none', hasTrans: i > 0, chipLeft: (st[i] * pps) + 'px', transShort: tr[0], transLabel: 'Übergang: ' + tr[0], chipBg: TR_COLOR[c.trans] || '#ccc',
+      select: e => { e.stopPropagation(); this.select({ type: 'clip', id: c.id }); this.seek(st[i] + 0.01); },
+      pickTrans: e => { e.stopPropagation(); this.select({ type: 'clip', id: c.id }); this.seek(Math.max(0, st[i] - 0.3)); },
+      resizeDown: e => { this.select({ type: 'clip', id: c.id }); this.startDrag(e, { kind: 'clipR', id: c.id, o: c.dur }); },
+      dragStart: e => { if (this.drag) { e.preventDefault(); return; } this.dnd = 'clipmove:' + c.id; try { e.dataTransfer.setData('text/plain', 'clipmove:' + c.id); } catch (x) {} } }; });
+    const lanes = []; const textsSorted = [...ad.texts].sort((a, b) => a.start - b.start);
+    const laneOf = {}; textsSorted.forEach(tb => { let l = lanes.findIndex(end => end <= tb.start + 0.01); if (l < 0) { l = lanes.length; lanes.push(0); } lanes[l] = tb.end; laneOf[tb.id] = l; });
+    const textsV = ad.texts.map(tb => ({ text: tb.text.replace(/\n/g, ' '), left: (tb.start * pps) + 'px', width: Math.max(10, (Math.min(tb.end, total) - tb.start) * pps - 2) + 'px', top: (5 + laneOf[tb.id] * 23) + 'px',
+      outline: selId === tb.id ? '2px solid #4da3ff' : 'none',
+      down: e => { this.select({ type: 'text', id: tb.id }); this.startDrag(e, { kind: 'tText', id: tb.id, os: tb.start, oe: tb.end }); },
+      resizeDown: e => { this.select({ type: 'text', id: tb.id }); this.startDrag(e, { kind: 'tTextR', id: tb.id, oe: tb.end }); } }));
+    const textH = Math.max(1, lanes.length) * 23 + 10;
+    const audioV = ad.audio.map(a => {
+      const len = a.len ?? total, pk = s.peaks[a.src === 'trailer' ? 'trailer' : a.src], n = Math.max(20, Math.round(len * pps / 4)), bars = [];
+      const s1 = st[1] ?? 99;
+      for (let i = 0; i < n; i++) { const x = (i + 0.5) * len / n, idx = Math.floor((a.offset + x) * 50), p = pk ? (pk[idx] || 0) : 0.2;
+        const fi = a.fadeIn > 0 ? clamp(x / a.fadeIn) : 1, fo = a.fadeOut > 0 ? clamp((len - x) / a.fadeOut) : 1, il = a.introLow && x < s1 ? 0.4 : 1, env = clamp(fi * fo * il * a.vol, 0, 1.5);
+        bars.push({ h: Math.max(4, Math.min(100, p * 100 * (0.3 + 0.7 * Math.min(1, env)))).toFixed(0) + '%', o: (0.3 + 0.7 * Math.min(1, env)).toFixed(2) }); }
+      const muted = s.mute[a.id] || (s.solo && s.solo !== a.id);
+      return { kind: a.kind || 'Audio', label: a.label + ' · ab ' + a.offset.toFixed(1) + 's', left: (a.at * pps) + 'px', width: (len * pps) + 'px', bars, op: muted ? 0.3 : 1,
+        outline: selId === a.id ? '2px solid #4da3ff' : 'none', mBg: s.mute[a.id] ? '#d2161b' : 'transparent', sBg: s.solo === a.id ? '#f2b84b' : 'transparent', sFg: s.solo === a.id ? '#1d1c1b' : paper,
+        mute: () => this.set({ mute: { ...s.mute, [a.id]: !s.mute[a.id] } }), solo: () => this.set({ solo: s.solo === a.id ? null : a.id }),
+        down: e => { this.select({ type: 'audio', id: a.id }); this.startDrag(e, { kind: 'aud', id: a.id, o: a.offset }); } };
+    });
+    const sfxV = this.allSfx(ad).map(x => { const d = FXDEF[x.fx], small = x.fx === 'tick' || x.fx === 'pop' || x.fx === 'beep', start = Math.max(0, x.at - d[3]);
+      return { left: (start * pps) + 'px', width: Math.max(small ? 8 : 26, d[2] * pps) + 'px', top: x.linked ? '24px' : (small ? '6px' : '4px'), h: x.linked ? '16px' : (small ? '14px' : '18px'), color: d[1], label: small ? '' : d[0], title: d[0] + ' @ ' + x.at.toFixed(2) + ' s' + (x.linked ? ' (an Übergang gekoppelt)' : ''),
+        outline: (selId === x.id || (sel && sel.type === 'clip' && sel.id === x.linked)) ? '2px solid #4da3ff' : 'none', cursor: x.linked ? 'pointer' : 'grab', border: x.linked ? '1px dashed #1d1c1b' : 'none',
+        down: e => { if (x.linked) { e.stopPropagation(); this.select({ type: 'clip', id: x.linked }); return; } this.select({ type: 'sfx', id: x.id }); this.startDrag(e, { kind: 'sfx', id: x.id, o: x.at }); } }; });
+    const ticks = []; const step = pps < 30 ? 2 : 1; for (let k = 0; k <= Math.ceil(total); k += step) ticks.push({ left: (k * pps) + 'px', label: k + 's' });
+
+    // inspector
+    const it = this.selItem(), sType = it ? sel.type : null;
+    const stx = sType === 'text' ? { text: it.text, font: it.font, anim: it.anim, size: it.size, sizeLabel: it.size.toFixed(1), rot: it.rot || 0, rotLabel: (it.rot || 0) + '°', start: it.start, end: Math.min(it.end, +total.toFixed(2)) } : {};
+    const scx = sType === 'clip' ? { label: (this.asset(it.asset) || {}).label || 'Clip', dur: it.dur, speed: String(it.speed), link: it.link !== false } : {};
+    const sxx = sType === 'sfx' ? { label: FXDEF[it.fx][0], at: it.at, v: it.v ?? FXDEF[it.fx][4], vLabel: Math.round((it.v ?? FXDEF[it.fx][4]) * 100) + '%' } : {};
+    const sax = sType === 'audio' ? { label: it.label, vol: it.vol, volLabel: Math.round(it.vol * 100) + '%', offset: it.offset, at: it.at, fadeIn: it.fadeIn, fadeOut: it.fadeOut, introLow: !!it.introLow } : {};
+    const cp = ad.copy, pl = cp.primary.length, hl = cp.headline.length;
+    const num = f => e => { const v = parseFloat(e.target.value); if (!isNaN(v)) this.updSel(f(v)); };
+    const kiStatus = s.kiBusy ? 'Claude schreibt …' : P.label;
+    const safe = F.safe || [0, 0];
+
+    return {
+      phasesV, isOverview: s.view === 'overview', isEditor: s.view === 'editor',
+      ...(() => { const o = act(s.view === 'overview'), e = act(s.view === 'editor'); return { ovBg: o.bg, ovFg: o.fg, edBg: e.bg, edFg: e.fg }; })(),
+      goOverview: () => { this.pause(); this.set({ view: 'overview' }); }, goEditor: () => this.set({ view: 'editor' }),
+      phaseTitle: 'Ad-Formate · ' + P.label, phaseSub: P.time + ' · ' + FORMATS.length + ' Formate · Texte, Schnitt und Ton je Format editierbar',
+      overview, formatsV, assetTabs, assetsV, assetHint,
+      openUpload: () => this.fileInput.current && this.fileInput.current.click(), fileInput: this.fileInput, onFiles: e => this.onFiles(e),
+      isVideo, isImage: !isVideo, togglePlay: () => this.togglePlay(), toStart: () => this.seek(0), playLabel: s.playing ? 'Pause' : 'Play',
+      timeLabel: fmtT(t) + ' / ' + fmtT(total), fmtLine: `${F.label} · ${F.net} · ${F.w}×${F.h}` + (isVideo ? ` · ${total.toFixed(1)} s` : ''),
+      addText: () => { const id = uid(); this.mutate(a => { a.texts.push({ id, role: null, text: 'NEUER TEXT', x: 50, y: 40, size: 8, style: 'ink', font: 'pix', anchor: 'center', rot: 0, start: +this.tNow.toFixed(2), end: isVideo ? +Math.min(total, this.tNow + 2.5).toFixed(2) : 999, anim: isVideo ? 'pop' : 'none' }); }); this.focusText = true; this.setState({ sel: { type: 'text', id } }); },
+      toggleSafe: () => this.set({ showSafe: !s.showSafe }), safeBg: s.showSafe ? ink : 'transparent', safeFg: s.showSafe ? paper : ink,
+      showSafeZones: isVideo && s.showSafe && (safe[0] + safe[1] > 0), safeTop: safe[0] + '%', safeBot: safe[1] + '%',
+      canvasRef: this.canvasRef, canvasDown: () => this.select(null), cvW: cw + 'px', cvH: ch + 'px', cvBg: !isVideo ? ((this.asset(ad.bg) || {}).src || '') : '', stageBox: this.stageBox, editorRef: this.editorRef, editorH: (s.edH || 760) + 'px',
+      allowDrop: e => e.preventDefault(), dropCanvas: e => { const id = getDrop(e); if (id && !id.startsWith('clipmove:')) this.dropAsset(id, 'canvas', null); },
+      dropVideo: e => { const id = getDrop(e); this.dropAsset(id, 'video', xIn(e)); }, dropSfx: e => { const id = getDrop(e); if (id && id.startsWith('fx:')) this.dropAsset(id, 'sfx', xIn(e)); },
+      dropAudio: e => { const id = getDrop(e); if (id && id.startsWith('aud:')) this.dropAsset(id, 'audio', xIn(e)); },
+      mediaReady: () => { if (!this.state.playing) this.applyVideo(this.tNow); }, slot0: this.slot0, slot1: this.slot1, vid0: this.vid0, vid1: this.vid1, img0: this.img0, img1: this.img1, ovRef: this.ovRef, cvTexts,
+      kiStatus, kiLens: [12, 15, 22, 30].map(n => ({ label: n + ' s', ...dact(s.ki.len === n), onClick: () => this.set({ ki: { ...s.ki, len: n } }) })),
+      kiStyles: [['energie', 'Energie'], ['atmo', 'Atmosphäre'], ['clean', 'Clean']].map(([id, l]) => ({ label: l, ...dact(s.ki.style === id), onClick: () => this.set({ ki: { ...s.ki, style: id } }) })),
+      kiCut: () => { const fresh = buildAd(s.phase, s.fmt, s.ki); this.mutate(a => { const texts = fresh.texts.map(nt => { const old = a.texts.find(o => o.role && o.role === nt.role); return old ? { ...nt, text: old.text } : nt; }); Object.assign(a, { clips: fresh.clips, sfx: fresh.sfx, texts }); }); this.seek(0); this.showToast(`Neuer Schnitt: ${s.ki.len} s · ${s.ki.style === 'atmo' ? 'Atmosphäre' : s.ki.style === 'clean' ? 'Clean' : 'Energie'}. Deine Texte bleiben erhalten.`); },
+      kiTexts: () => this.kiTexts(), exportBrief: () => this.exportBrief(),
+      selText: sType === 'text', selClip: sType === 'clip', selSfx: sType === 'sfx', selAudio: sType === 'audio', selNone: !sType,
+      st: stx, sc: scx, sx: sxx, sa: sax, textArea: this.textArea,
+      onText: e => this.updSel({ text: e.target.value }), onFont: e => this.updSel({ font: e.target.value }), onAnim: e => this.updSel({ anim: e.target.value }),
+      onSize: num(v => ({ size: v })), onRot: num(v => ({ rot: v })), onStart: num(v => ({ start: Math.max(0, v) })), onEnd: num(v => ({ end: v })),
+      alignLeft: () => this.updSel({ anchor: 'left', x: 8 }), alignCenter: () => this.updSel({ anchor: 'center', x: 50 }),
+      styleOpts: Object.entries(TSTYLE).map(([k, v]) => ({ label: v[0], bg: v[1] === 'transparent' ? '#8a847d' : v[1], fg: v[2], outline: it && it.style === k ? '2px solid #4da3ff' : 'none', onClick: () => this.updSel({ style: k }) })),
+      animOpts: ANIMS.map(([value, label]) => ({ value, label })),
+      dupSel: () => { if (!it) return; const id = uid(); this.mutate(a => { a.texts.push({ ...it, id, y: it.y + 6 }); }); this.setState({ sel: { type: 'text', id } }); }, delSel: () => this.delSel(),
+      onClipDur: num(v => ({ dur: Math.max(0.3, v) })), onClipSpeed: e => this.updSel({ speed: e.target.value }), onClipLink: e => this.updSel({ link: e.target.checked }),
+      transOpts: Object.entries(TR).map(([k, v]) => ({ label: v[0], sub: v[3], ...act(it && it.trans === k), onClick: () => { this.updSel({ trans: k }); const i = ad.clips.findIndex(c => c.id === selId); if (i > 0) { const back = Math.max(0, st[i] - 0.6); this.seek(back); if (!s.playing) setTimeout(() => this.play(), 30); } } })),
+      transAll: () => { if (!it) return; this.mutate(a => a.clips.forEach((c, i) => { if (i) c.trans = it.trans; })); this.showToast('Übergang „' + TR[it.trans][0] + '“ auf alle Schnitte angewendet.'); },
+      fxOpts: Object.entries(FXDEF).map(([k, v]) => ({ label: v[0], ...act(it && it.fx === k), onClick: () => { this.updSel({ fx: k }); playFx(k, { dur: v[2], v: v[4], dir: 1 }, s.sfxVol); } })),
+      onSfxAt: num(v => ({ at: Math.max(0, v) })), onSfxV: num(v => ({ v })), previewSfx: () => { audioInit(); AUD.ctx && AUD.ctx.resume(); if (it) { const d = FXDEF[it.fx]; setTimeout(() => playFx(it.fx, { dur: d[2], v: it.v ?? d[4], dir: 1 }, s.sfxVol), 30); } },
+      onAudVol: num(v => ({ vol: v })), onAudOffset: num(v => ({ offset: Math.max(0, v) })), onAudAt: num(v => ({ at: Math.max(0, v) })), onAudFi: num(v => ({ fadeIn: Math.max(0, v) })), onAudFo: num(v => ({ fadeOut: Math.max(0, v) })), onAudIntro: e => this.updSel({ introLow: e.target.checked }),
+      fmtLabel: F.label, cp: { ...cp, primCount: pl + ' / 125', primColor: pl > 125 ? '#d2161b' : ink, headCount: hl + ' / 40', headColor: hl > 40 ? '#d2161b' : ink },
+      onPrimary: e => this.mutate(a => { a.copy.primary = e.target.value; }), onHeadline: e => this.mutate(a => { a.copy.headline = e.target.value; }), onDesc: e => this.mutate(a => { a.copy.desc = e.target.value; }), onCta: e => this.mutate(a => { a.copy.cta = e.target.value; }),
+      toggleDone: () => this.mutate(a => { a.done = !a.done; }), doneLabel: ad.done ? 'Freigegeben' : 'Freigeben', doneBg: ad.done ? '#2b7a4b' : 'transparent', doneFg: ad.done ? '#fff' : ink,
+      zoomIn: () => this.set({ zoom: Math.min(140, pps + 12) }), zoomOut: () => this.set({ zoom: Math.max(18, pps - 12) }),
+      clipCount: ad.clips.length, textCount: ad.texts.length, textH: textH + 'px', tlScroll: this.tlScroll, tlW: Math.max(600, total * pps + 80) + 'px', ticks, clipsV, textsV, audioV, sfxV,
+      scrubDown: e => { this.drag = { kind: 'scrub', x0: e.clientX, y0: e.clientY }; this.handleMove(e); },
+      phLeft: (t * pps) + 'px', sfxVol: s.sfxVol, onSfxVol: e => this.set({ sfxVol: parseFloat(e.target.value) }),
+      sfxMute: () => this.set({ mute: { ...s.mute, sfx: !s.mute.sfx } }), sfxSolo: () => this.set({ solo: s.solo === 'sfx' ? null : 'sfx' }),
+      sfxMBg: s.mute.sfx ? '#d2161b' : 'transparent', sfxSBg: s.solo === 'sfx' ? '#f2b84b' : 'transparent', sfxSFg: s.solo === 'sfx' ? '#1d1c1b' : paper, sfxLaneOp: this.sfxAudible() ? 1 : 0.35,
+      hasToast: !!s.toast, toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

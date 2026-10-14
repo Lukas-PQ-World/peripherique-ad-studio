@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>html,body{margin:0;height:100%;background:#1d1c1b}a{color:#d2161b}a:hover{color:#2b2a29}</style>
+<script>window.OM_SCENES = '[{"name":"Hook","dur":3.5,"desc":"Camcorder-POV, Kettenkarussell in Slow-Mo (Trailer 7,8 s). POV: + Copy-Variante"},{"name":"Live","dur":3.5,"desc":"Wisch-Schnitt: Crowd singt Rooftop → Speed-Ramp Absperrung-Walk"},{"name":"Reveal","dur":3,"desc":"Blitz-Schnitt aufs Plakat, Foto wischt rein"},{"name":"Songs","dur":5,"desc":"4 Live-Cuts (Selfie, Bühne, Handys, Backstage-Lachen), Hits stapeln sich"},{"name":"Info","dur":3.5,"desc":"Logo fällt, Datum stempelt, Sticker"},{"name":"CTA","dur":3.5,"desc":"Copy-Headline + Button pulsiert, Fade für Loop"}]';</script>
+<script>window.OM_PLAYBACK = '{"mode":"times","count":2}';</script>
+<script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "motionEditor": true,
+  "copyVariant": "direct",
+  "sound": true,
+  "showSticker": true,
+  "sfx": false,
+  "sfxLevel": 60,
+  "musicStart": 2
+}/*EDITMODE-END*/;</script>
+</helmet>
+<div style="width:100vw;height:100vh">
+<x-import component-from-global-scope="NSReelFinal" from="./animations-v3.jsx ./tweaks-panel.jsx ./ns-reel-final.jsx" hint-size="100%,100%"></x-import>
+</div>
+</x-dc>
+</body>
+</html>
