@@ -1,0 +1,19 @@
+services:
+  api:
+    build: ../backend
+    restart: unless-stopped
+    env_file: ../backend/.env
+    environment:
+      DATA_DIR: /data
+      ASSET_ROOT: /srv/www
+    volumes:
+      - api-data:/data
+      - ../:/srv/www:ro
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    env_file: ../backend/.env
+    depends_on: [api]
+volumes:
+  api-data:
