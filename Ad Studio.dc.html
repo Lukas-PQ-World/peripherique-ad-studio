@@ -10,9 +10,10 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=VT323&family=Jost:wght@400;600&family=Anton&family=DM+Serif+Display&family=Space+Mono:wght@700&family=Archivo+Black&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<style>:root{--acc:#8b7bff;--acc-ink:#ffffff;--acc-fg:#a99bff;--acc-soft:rgba(139,123,255,.18)}html,body{margin:0;background:#141419;color:#ecebf2;color-scheme:dark}a{color:var(--acc-fg)}a:hover{color:#ffffff}input,select,textarea,button{font-family:'DM Sans',sans-serif;color:inherit}input:not([type=range]):not([type=checkbox]):not([type=color]),textarea,select{background-color:#16161c}::placeholder{color:#6f6d80}</style>
+<style>:root{--acc:#8b7bff;--acc-ink:#ffffff;--acc-fg:#a99bff;--acc-soft:rgba(139,123,255,.18)}html,body{margin:0;background:#141419;color:#ecebf2;color-scheme:dark}a{color:var(--acc-fg)}a:hover{color:#ffffff}input,select,textarea,button{font-family:'DM Sans',sans-serif;color:inherit}input:not([type=range]):not([type=checkbox]):not([type=color]),textarea,select{background-color:#16161c}::placeholder{color:#6f6d80}@keyframes asSpin{to{transform:rotate(360deg)}}</style>
 <script src="./ad-studio-core.js"></script>
 <script src="./ad-studio-api.js"></script>
+<script src="./ad-studio-media-ai.js"></script>
 </helmet>
 <div style="font-family:'DM Sans',sans-serif;color:#ecebf2;background:#141419;min-height:100vh;display:flex;flex-direction:column">
 
@@ -409,6 +410,7 @@
       <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap">
         <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:32px;letter-spacing:-0.02em">Mediathek</h1><span style="font-size:14px;color:#a3a1b3">{{ libSub }}</span></div>
         <div style="flex:1"></div>
+        <button onClick="{{ newGraphic }}" style="height:38px;padding:0 14px;border:1px solid #2e2d38;border-radius:9px;background:#1c1c23;font-weight:600;font-size:14px;cursor:pointer">◧ Neue Grafik</button>
         <button onClick="{{ openUpload }}" style="height:38px;padding:0 16px;border:none;border-radius:9px;background:var(--acc);color:var(--acc-ink);font-weight:600;font-size:14px;cursor:pointer">↑ Hochladen</button>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -435,6 +437,7 @@
                 <sc-for list="{{ m.tags }}" as="t"><button onClick="{{ t.remove }}" title="Tag entfernen" style="border:none;border-radius:999px;background:var(--acc-soft);color:var(--acc-fg);font-size:11px;font-weight:600;padding:3px 8px;cursor:pointer">{{ t.label }} ×</button></sc-for>
                 <select value="" onChange="{{ m.addTag }}" aria-label="Tag hinzufügen" style="font-size:11px;padding:2px 4px;border:1px dashed #3a3946;border-radius:999px;color:#a3a1b3;max-width:90px"><option value="">+ Tag</option><sc-for list="{{ m.tagOpts }}" as="o"><option value="{{ o }}">{{ o }}</option></sc-for></select>
               </div>
+              <sc-if value="{{ m.hasAction }}"><button onClick="{{ m.action }}" style="height:32px;border:1px solid #2e2d38;border-radius:8px;background:#141419;font-size:12px;font-weight:600;cursor:pointer;color:var(--acc-fg)" style-hover="border-color:var(--acc)">{{ m.actionLabel }}</button></sc-if>
               <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#8f8da2;border-top:1px solid #2e2d38;padding-top:8px"><span>{{ m.used }}</span><button onClick="{{ m.del }}" title="Entfernen" aria-label="Entfernen" style="border:none;background:none;color:#ff6b6e;cursor:pointer;font-size:13px;padding:0">✕</button></div>
             </div>
           </div>
@@ -475,6 +478,120 @@
       </div>
     </sc-if>
   </main>
+</div>
+</sc-if>
+
+<sc-if value="{{ isGraphic }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:240px minmax(0,1fr) 300px;height:calc(100vh - 60px);min-height:640px">
+  <aside style="background:#1c1c23;border-right:1px solid #2e2d38;display:flex;flex-direction:column;min-height:0;min-width:0">
+    <div style="padding:14px 14px 8px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8f8da2">Ebenen · {{ gCount }}</span></div>
+    <div style="display:flex;gap:4px;padding:0 10px 10px">
+      <button onClick="{{ gAddText }}" title="Text hinzufügen" aria-label="Text hinzufügen" style="flex:1;height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer;font-weight:700">T</button>
+      <button onClick="{{ gAddRect }}" title="Rechteck hinzufügen" aria-label="Rechteck hinzufügen" style="flex:1;height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer">▭</button>
+      <button onClick="{{ gAddEllipse }}" title="Kreis hinzufügen" aria-label="Kreis hinzufügen" style="flex:1;height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer">◯</button>
+      <select value="" onChange="{{ gAddImage }}" title="Bild aus Mediathek" aria-label="Bild aus Mediathek" style="flex:1.4;font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0;padding:0 4px;height:32px"><option value="">+ Bild</option><sc-for list="{{ gImgOpts }}" as="o"><option value="{{ o.id }}">{{ o.label }}</option></sc-for></select>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:0 8px 12px;display:flex;flex-direction:column;gap:2px">
+      <sc-for list="{{ gLayersList }}" as="l" hint-placeholder-count="5">
+        <div onClick="{{ l.select }}" style="display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:8px;background:{{ l.bg }};cursor:pointer">
+          <button onClick="{{ l.toggleVis }}" title="Ein-/ausblenden" aria-label="Ein-/ausblenden" style="width:22px;height:22px;border:none;background:none;color:{{ l.visColor }};cursor:pointer;padding:0;font-size:13px">{{ l.visIcon }}</button>
+          <span style="width:30px;height:30px;border-radius:5px;flex-shrink:0;background-color:{{ l.sw }};background-image:{{ l.thumb }};background-size:contain;background-repeat:no-repeat;background-position:center;border:1px solid #2e2d38;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#141419">{{ l.icon }}</span>
+          <span style="flex:1;min-width:0;font-size:12px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:{{ l.fg }}">{{ l.name }}</span>
+          <button onClick="{{ l.up }}" title="Nach vorne" aria-label="Nach vorne" style="width:20px;height:22px;border:none;background:none;color:#8f8da2;cursor:pointer;padding:0">↑</button>
+          <button onClick="{{ l.down }}" title="Nach hinten" aria-label="Nach hinten" style="width:20px;height:22px;border:none;background:none;color:#8f8da2;cursor:pointer;padding:0">↓</button>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+
+  <section style="display:flex;flex-direction:column;gap:10px;padding:12px 16px;min-width:0;min-height:0;position:relative">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-weight:700;font-size:14px;margin-right:4px">{{ gTitle }}</span>
+      <sc-if value="{{ gHasSource }}">
+        <sc-for list="{{ gModes }}" as="c"><button onClick="{{ c.on }}" style="border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">{{ c.label }}</button></sc-for>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#a3a1b3">Farben {{ gK }}<input type="range" min="2" max="12" step="1" value="{{ gK }}" onInput="{{ gOnK }}" style="width:80px;accent-color:var(--acc)"></label>
+        <button onClick="{{ gRedecompose }}" style="height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer;color:var(--acc-fg);font-weight:600">↻ Neu zerlegen</button>
+      </sc-if>
+      <div style="flex:1"></div>
+      <button onClick="{{ gUndo }}" title="Rückgängig (⌘Z)" aria-label="Rückgängig" style="height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer;opacity:{{ gUndoOp }}">↶</button>
+      <select value="{{ gSize }}" onChange="{{ gOnSize }}" aria-label="Format" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0;height:32px;padding:0 6px"><sc-for list="{{ gSizes }}" as="o"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
+    </div>
+    <div ref="{{ gStage }}" style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:repeating-conic-gradient(#1a1a20 0% 25%, #16161b 0% 50%) 50% / 24px 24px;border-radius:12px">
+      <div onPointerDown="{{ gCanvasDown }}" style="position:relative;overflow:hidden;flex-shrink:0;width:{{ gCw }};height:{{ gCh }};background:{{ gBg }};box-shadow:0 14px 40px rgba(0,0,0,.45);touch-action:none">
+        <sc-for list="{{ gLayers }}" as="l">
+          <div onPointerDown="{{ l.down }}" style="position:absolute;left:{{ l.left }};top:{{ l.top }};width:{{ l.w }};height:{{ l.h }};transform:{{ l.tf }};transform-origin:50% 50%;opacity:{{ l.op }};background-color:{{ l.fill }};background-image:{{ l.url }};background-size:100% 100%;border-radius:{{ l.radius }};outline:{{ l.outline }};outline-offset:2px;font-size:{{ l.fs }};font-family:{{ l.ff }};font-weight:{{ l.fw }};color:{{ l.color }};padding:{{ l.pad }};line-height:1.15;white-space:pre;text-align:center;cursor:move;user-select:none;pointer-events:{{ l.pe }}">{{ l.text }}</div>
+        </sc-for>
+        <sc-if value="{{ gHasHandle }}"><div onPointerDown="{{ gScaleDown }}" title="Größe ziehen" style="position:absolute;left:{{ gHx }};top:{{ gHy }};width:12px;height:12px;margin:-6px 0 0 -6px;background:#ffffff;border:2px solid var(--acc);border-radius:3px;cursor:nwse-resize;z-index:5"></div></sc-if>
+      </div>
+    </div>
+    <div style="font-size:12px;color:#8f8da2;text-align:center">Ebene ziehen = verschieben · Ecke ziehen = skalieren · Pfeiltasten = 1 px · Entf = löschen</div>
+    <sc-if value="{{ gIsBusy }}"><div style="position:absolute;inset:0;background:rgba(20,20,25,.72);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:10"><div style="width:34px;height:34px;border-radius:17px;border:3px solid #2e2d38;border-top-color:var(--acc);animation:asSpin 0.9s linear infinite"></div><span style="font-size:14px;color:#c9c7d6">{{ gBusy }}</span></div></sc-if>
+  </section>
+
+  <aside style="background:#1c1c23;border-left:1px solid #2e2d38;display:flex;flex-direction:column;gap:16px;padding:14px;overflow-y:auto;min-width:0">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8f8da2">Farbprofil</span><label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#a3a1b3">Fläche<input type="color" value="{{ gBg }}" onInput="{{ gOnBg }}" aria-label="Hintergrundfarbe" style="width:28px;height:24px;border:1px solid #2e2d38;border-radius:6px;padding:1px;background:#141419"></label></div>
+      <sc-if value="{{ gHasPalette }}">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ gPalette }}" as="c">
+            <div style="display:flex;align-items:center;gap:8px">
+              <input type="color" value="{{ c.hex }}" onInput="{{ c.on }}" aria-label="Farbe ändern" style="width:34px;height:28px;border:1px solid #2e2d38;border-radius:6px;padding:1px;background:#141419;cursor:pointer">
+              <span style="display:flex;flex-direction:column;flex:1;min-width:0;line-height:1.2"><span style="font-size:12px;font-weight:600">{{ c.name }}</span><span style="font-size:11px;color:#8f8da2;font-family:'JetBrains Mono',monospace">{{ c.hex }} · {{ c.pct }}</span></span>
+              <sc-if value="{{ c.changed }}"><button onClick="{{ c.reset }}" title="Original" aria-label="Original" style="border:none;background:none;color:#8f8da2;cursor:pointer;font-size:13px">↺</button></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button onClick="{{ gBrand }}" style="height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer;flex:1">Brand-Farben</button>
+          <button onClick="{{ gKi }}" style="height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer;flex:1;border-color:var(--acc);color:var(--acc-fg);font-weight:600">{{ gKiLabel }}</button>
+        </div>
+        <sc-if value="{{ gHasVariants }}"><div style="display:flex;flex-direction:column;gap:4px"><sc-for list="{{ gVariants }}" as="v"><button onClick="{{ v.on }}" style="display:flex;align-items:center;gap:8px;border:1px solid #2e2d38;border-radius:8px;background:#141419;padding:6px 8px;cursor:pointer;text-align:left"><span style="display:flex;gap:2px"><sc-for list="{{ v.sw }}" as="w"><span style="width:14px;height:14px;border-radius:3px;background:{{ w }}"></span></sc-for></span><span style="font-size:12px">{{ v.name }}</span></button></sc-for></div></sc-if>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ gHasSel }}">
+      <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid #2e2d38;padding-top:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8f8da2">Ebene</span><div style="display:flex;gap:4px"><button onClick="{{ gDup }}" title="Duplizieren" aria-label="Duplizieren" style="height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer;padding:0 8px">⧉</button><button onClick="{{ gDel }}" title="Löschen" aria-label="Löschen" style="height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer;padding:0 8px;color:#ff6b6e">✕</button></div></div>
+        <input value="{{ gs.name }}" onInput="{{ gOnName }}" aria-label="Ebenenname" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0;font-weight:600">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a3a1b3">X<input type="number" value="{{ gs.x }}" onChange="{{ gOnX }}" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0"></label>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a3a1b3">Y<input type="number" value="{{ gs.y }}" onChange="{{ gOnY }}" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0"></label>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a3a1b3">Größe · {{ gs.sLabel }}<input type="range" min="0.05" max="4" step="0.01" value="{{ gs.s }}" onInput="{{ gOnS }}" style="accent-color:var(--acc)"></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a3a1b3">Drehung · {{ gs.rotLabel }}<input type="range" min="-180" max="180" step="1" value="{{ gs.rot }}" onInput="{{ gOnRot }}" style="accent-color:var(--acc)"></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a3a1b3">Deckkraft · {{ gs.opLabel }}<input type="range" min="0" max="1" step="0.01" value="{{ gs.op }}" onInput="{{ gOnOp }}" style="accent-color:var(--acc)"></label>
+        <sc-if value="{{ gs.isPixel }}">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#a3a1b3">Einfärben<input type="color" value="{{ gs.tint }}" onInput="{{ gOnTint }}" aria-label="Einfärben" style="width:34px;height:28px;border:1px solid #2e2d38;border-radius:6px;padding:1px;background:#141419"><sc-if value="{{ gs.hasTint }}"><button onClick="{{ gClearTint }}" style="border:none;background:none;color:var(--acc-fg);font-size:12px;cursor:pointer;padding:0">Original</button></sc-if></div>
+        </sc-if>
+        <sc-if value="{{ gs.isText }}">
+          <textarea value="{{ gs.text }}" onInput="{{ gOnText }}" rows="2" aria-label="Text" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0;font-size:14px;resize:vertical"></textarea>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a3a1b3">Schriftgröße<input type="number" min="8" value="{{ gs.size }}" onChange="{{ gOnSize2 }}" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0"></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a3a1b3">Schrift<select value="{{ gs.font }}" onChange="{{ gOnFont }}" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0"><option value="display">{{ gFontD }}</option><option value="text">{{ gFontT }}</option></select></label>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;font-size:12px;color:#a3a1b3;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:6px">Text<input type="color" value="{{ gs.color }}" onInput="{{ gOnColor }}" style="width:30px;height:26px;border:1px solid #2e2d38;border-radius:6px;padding:1px;background:#141419"></label>
+            <label style="display:flex;align-items:center;gap:6px">Balken<input type="color" value="{{ gs.bgc }}" onInput="{{ gOnTBg }}" style="width:30px;height:26px;border:1px solid #2e2d38;border-radius:6px;padding:1px;background:#141419"></label>
+            <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" checked="{{ gs.hasBg }}" onChange="{{ gOnHasBg }}" style="accent-color:var(--acc)">mit Balken</label>
+          </div>
+        </sc-if>
+        <sc-if value="{{ gs.isShape }}">
+          <div style="display:flex;gap:12px;align-items:center;font-size:12px;color:#a3a1b3">
+            <label style="display:flex;align-items:center;gap:6px">Füllung<input type="color" value="{{ gs.fill }}" onInput="{{ gOnFill }}" style="width:30px;height:26px;border:1px solid #2e2d38;border-radius:6px;padding:1px;background:#141419"></label>
+            <label style="display:flex;align-items:center;gap:6px;flex:1">Ecken<input type="range" min="0" max="200" step="1" value="{{ gs.radius }}" onInput="{{ gOnRadius }}" style="flex:1;accent-color:var(--acc)"></label>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <div style="display:flex;flex-direction:column;gap:8px;border-top:1px solid #2e2d38;padding-top:14px;margin-top:auto">
+      <span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8f8da2">Speichern</span>
+      <input value="{{ gName }}" onInput="{{ gOnDocName }}" aria-label="Name der Grafik" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0">
+      <button onClick="{{ gSave }}" style="height:38px;border:none;border-radius:9px;background:var(--acc);color:var(--acc-ink);font-weight:700;font-size:13px;cursor:pointer">{{ gSaveLabel }}</button>
+      <button onClick="{{ gDownload }}" style="height:34px;border:1px solid #2e2d38;border-radius:9px;background:#1c1c23;font-size:13px;cursor:pointer">PNG herunterladen</button>
+      <span style="font-size:11px;color:#8f8da2">{{ gOutInfo }}</span>
+    </div>
+  </aside>
 </div>
 </sc-if>
 
@@ -765,6 +882,45 @@
 </div>
 </sc-if>
 
+<sc-if value="{{ hasSeq }}" hint-placeholder-val="{{ false }}">
+<div onPointerDown="{{ closeSeq }}" style="position:fixed;inset:0;background:rgba(8,8,12,.72);z-index:44;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto">
+  <div onPointerDown="{{ stop }}" style="background:#1c1c23;border:1px solid #2e2d38;border-radius:18px;max-width:980px;width:100%;padding:24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 30px 80px rgba(0,0,0,.5)">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:24px;letter-spacing:-0.02em">Sequenzen · {{ sqTitle }}</span><span style="font-size:13px;color:#a3a1b3">{{ sqSub }}</span></div><button onClick="{{ closeSeq }}" aria-label="Schließen" style="border:none;background:none;font-size:22px;cursor:pointer;color:#8f8da2">×</button></div>
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:12px;background:#141419;border-radius:12px">
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#a3a1b3">Schnitt-Empfindlichkeit<input type="range" min="1" max="10" step="1" value="{{ sqSens }}" onInput="{{ sqOnSens }}" style="width:110px;accent-color:var(--acc)"><span style="font-family:'JetBrains Mono',monospace;color:#ecebf2">{{ sqSens }}</span></label>
+      <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#a3a1b3">Max. Länge <sc-for list="{{ sqLens }}" as="c"><button onClick="{{ c.on }}" style="border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">{{ c.label }}</button></sc-for></span>
+      <button onClick="{{ sqAnalyze }}" style="height:32px;padding:0 10px;border:1px solid #2e2d38;border-radius:8px;background:#1c1c23;font-size:12px;cursor:pointer;color:var(--acc-fg);font-weight:600">↻ Neu analysieren</button>
+    </div>
+    <sc-if value="{{ sqBusy }}"><div style="display:flex;flex-direction:column;gap:6px"><div style="height:6px;border-radius:3px;background:#2e2d38;overflow:hidden"><div style="height:100%;width:{{ sqProg }};background:var(--acc);border-radius:3px"></div></div><span style="font-size:12px;color:#a3a1b3">{{ sqBusyText }}</span></div></sc-if>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">
+      <sc-for list="{{ sqItems }}" as="q">
+        <button onClick="{{ q.toggle }}" style="text-align:left;background:#141419;border:2px solid {{ q.border }};border-radius:10px;overflow:hidden;padding:0;cursor:pointer;display:flex;flex-direction:column;opacity:{{ q.op }}">
+          <span style="aspect-ratio:16/9;background-image:url('{{ q.thumb }}');background-size:cover;background-position:center;position:relative;display:block">
+            <span style="position:absolute;left:6px;top:6px;width:20px;height:20px;border-radius:6px;background:{{ q.chkBg }};color:#141419;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid #ffffff">{{ q.chk }}</span>
+            <sc-if value="{{ q.highlight }}"><span style="position:absolute;right:6px;top:6px;background:#ffc65c;color:#141419;border-radius:5px;padding:1px 6px;font-size:10px;font-weight:700">Highlight</span></sc-if>
+            <span style="position:absolute;right:6px;bottom:6px;background:rgba(18,18,25,.82);color:#ffffff;border-radius:5px;padding:1px 6px;font-size:10px;font-family:'JetBrains Mono',monospace">{{ q.range }}</span>
+          </span>
+          <span style="padding:7px 8px;display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:12px;font-weight:600">{{ q.label }}</span>
+            <span style="height:4px;border-radius:2px;background:#2e2d38;overflow:hidden;display:block"><span style="display:block;height:100%;width:{{ q.energy }};background:{{ q.eColor }}"></span></span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-top:1px solid #2e2d38;padding-top:14px">
+      <span style="font-size:13px;color:#a3a1b3">{{ sqCount }}</span>
+      <button onClick="{{ sqAll }}" style="border:none;background:none;color:var(--acc-fg);font-size:13px;cursor:pointer;padding:0">{{ sqAllLabel }}</button>
+      <div style="flex:1"></div>
+      <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#a3a1b3"><sc-for list="{{ sqStyles }}" as="c"><button onClick="{{ c.on }}" style="border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">{{ c.label }}</button></sc-for></span>
+      <select value="{{ sqFmt }}" onChange="{{ sqOnFmt }}" aria-label="Format" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0;height:34px;padding:0 6px"><sc-for list="{{ sqFmts }}" as="o"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
+      <select value="{{ sqLen }}" onChange="{{ sqOnLen }}" aria-label="Länge" style="font-size:13px;padding:7px 9px;border:1px solid #2e2d38;border-radius:7px;color:#ecebf2;min-width:0;height:34px;padding:0 6px"><option value="12">12 s</option><option value="15">15 s</option><option value="22">22 s</option><option value="30">30 s</option></select>
+      <button onClick="{{ sqSave }}" style="height:38px;padding:0 14px;border:1px solid #2e2d38;border-radius:9px;background:#1c1c23;font-size:13px;font-weight:600;cursor:pointer">Als Clips speichern</button>
+      <button onClick="{{ sqCut }}" style="height:38px;padding:0 16px;border:none;border-radius:9px;background:var(--acc);color:var(--acc-ink);font-size:13px;font-weight:700;cursor:pointer">{{ sqCutLabel }}</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
 <sc-if value="{{ hasUpsell }}" hint-placeholder-val="{{ false }}">
 <div onPointerDown="{{ closeUpsell }}" style="position:fixed;inset:0;background:rgba(8,8,12,.7);z-index:45;display:flex;align-items:center;justify-content:center;padding:24px">
   <div onPointerDown="{{ stop }}" style="background:#1c1c23;border:1px solid #2e2d38;border-radius:18px;max-width:440px;width:100%;padding:26px;display:flex;flex-direction:column;gap:14px;box-shadow:0 30px 80px rgba(0,0,0,.5)">
@@ -795,7 +951,7 @@ class Component extends DCLogic {
     zoom: 46, showSafe: true, ki: { len: 15, style: 'energie' }, sfxVol: 0.7, mute: {}, solo: null, assetTab: 'clips', search: '', typeFilter: 'Alle', chFilter: 'all', stFilter: 'all',
     showNew: false, nf: null, toast: '', kiBusy: false, edH: 760, user: null, authMode: 'login', af: { email: '', password: '', name: '', org: '' }, authErr: '', authBusy: false, srvOpen: false, srvUrl: '', integ: {}, dateFilter: 'all', mq: '', mKind: 'all', mFilter: 'all', mCat: '', expFmt: 'mp4', pubBusy: '', accTab: 'profile', teamData: null, adminData: null, inv: { email: '', role: 'editor' }, pwForm: { current: '', next: '' }, billCycle: 'monthly', upsell: null };
   slot0 = React.createRef(); slot1 = React.createRef(); vid0 = React.createRef(); vid1 = React.createRef(); img0 = React.createRef(); img1 = React.createRef();
-  stageBox = React.createRef(); editorRef = React.createRef(); ovRef = React.createRef(); canvasRef = React.createRef(); tlScroll = React.createRef(); fileInput = React.createRef(); textArea = React.createRef();
+  stageBox = React.createRef(); editorRef = React.createRef(); ovRef = React.createRef(); canvasRef = React.createRef(); tlScroll = React.createRef(); fileInput = React.createRef(); textArea = React.createRef(); gStage = React.createRef();
   aud = {}; dimCache = {}; tNow = 0; drag = null; dnd = null; urls = {}; blobs = {}; loading = {}; hist = []; redoS = []; lastHist = 0;
 
   componentDidMount() {
@@ -805,6 +961,14 @@ class Component extends DCLogic {
     this.onKey = e => {
       const tag = (e.target.tagName || '').toLowerCase(), typing = tag === 'input' || tag === 'textarea' || tag === 'select';
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z' && this.state.view === 'editor' && !typing) { e.preventDefault(); e.shiftKey ? this.redo() : this.undo(); return; }
+      if (this.state.view === 'graphic' && !typing && this.state.g) {
+        const g = this.state.g, sl = g.layers.find(l => l.id === g.sel);
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); this.gUndo(); return; }
+        if ((e.key === 'Delete' || e.key === 'Backspace') && sl) { e.preventDefault(); this.gDelSel(); return; }
+        const mv = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+        if (mv && sl) { e.preventDefault(); const k = e.shiftKey ? 10 : 1; this.gUpd(sl.id, { x: sl.x + mv[0] * k, y: sl.y + mv[1] * k }, false); }
+        return;
+      }
       if (typing || this.state.view !== 'editor') return;
       if (e.code === 'Space') { e.preventDefault(); this.togglePlay(); }
       else if ((e.key === 'Delete' || e.key === 'Backspace') && this.state.sel) { e.preventDefault(); this.delSel(); }
@@ -1041,6 +1205,10 @@ class Component extends DCLogic {
   }
   componentDidUpdate() {
     this.applyAccent();
+    if (this.gStage.current && this.gObs !== this.gStage.current) {
+      this.gObs = this.gStage.current; this.gRO = this.gRO || new ResizeObserver(() => { const el = this.gObs; if (!el) return; const nb = { w: el.clientWidth, h: el.clientHeight }; if (!this.gBox || Math.abs(nb.w - this.gBox.w) > 1 || Math.abs(nb.h - this.gBox.h) > 1) { this.gBox = nb; this.forceUpdate(); } });
+      this.gRO.disconnect(); this.gRO.observe(this.gObs);
+    }
     if (this.stageBox.current !== this.observed || this.lastView !== this.state.view) { this.lastView = this.state.view; requestAnimationFrame(() => this.measure()); }
     if (!this.state.playing) this.applyVideo(this.tNow);
     if (this.focusText && this.textArea.current) { this.textArea.current.focus(); this.textArea.current.select(); this.focusText = false; }
@@ -1056,7 +1224,7 @@ class Component extends DCLogic {
   }
   persist() {
     clearTimeout(this.pt); this.pt = setTimeout(() => {
-      const s = this.state; if (!s.user) return; const ui = { accTab: s.accTab, view: s.view === 'editor' ? 'project' : s.view, pid: s.pid, tab: s.tab, phase: s.phase, fmt: s.fmt, variant: s.variant, zoom: s.zoom, showSafe: s.showSafe, ki: s.ki, sfxVol: s.sfxVol, mute: s.mute, solo: s.solo, assetTab: s.assetTab, chFilter: s.chFilter };
+      const s = this.state; if (!s.user) return; const ui = { accTab: s.accTab, view: s.view === 'editor' || s.view === 'graphic' ? 'project' : s.view, pid: s.pid, tab: s.tab, phase: s.phase, fmt: s.fmt, variant: s.variant, zoom: s.zoom, showSafe: s.showSafe, ki: s.ki, sfxVol: s.sfxVol, mute: s.mute, solo: s.solo, assetTab: s.assetTab, chFilter: s.chFilter };
       try { localStorage.setItem(LS + ':ui:' + s.user.id, JSON.stringify(ui)); } catch (e) {}
       this.saved = this.saved || new Map();
       s.projects.forEach(p => { if (this.saved.get(p.id) === p) return; this.saved.set(p.id, p); window.ASApi.saveProject(p).catch(e => { this.saved.delete(p.id); this.showToast('Speichern fehlgeschlagen: ' + e.message); }); });
@@ -1120,7 +1288,7 @@ class Component extends DCLogic {
         v.currentTime = m.noAuto ? Math.min(3, (v.duration || 6) / 2) : m.in + (m.len || 1) / 2;
         await new Promise(r => { v.onseeked = r; setTimeout(r, 2500); });
         const vw = v.videoWidth || 1, vh = v.videoHeight || 1, s = Math.max(120 / vw, 160 / vh);
-        x.drawImage(v, (120 - vw * s) / 2, (160 - vh * s) / 2, vw * s, vh * s); out[m.id] = c.toDataURL('image/jpeg', 0.7); if (v.videoWidth) this.dimCache[m.id] = [v.videoWidth, v.videoHeight];
+        x.drawImage(v, (120 - vw * s) / 2, (160 - vh * s) / 2, vw * s, vh * s); out[m.id] = await new Promise(r => c.toBlob(b => r(b ? URL.createObjectURL(b) : ''), 'image/jpeg', 0.7)); if (v.videoWidth) this.dimCache[m.id] = [v.videoWidth, v.videoHeight];
       } catch (e) {}
     }
     this.setState(s => ({ thumbs: { ...s.thumbs, ...out } }));
@@ -1247,9 +1415,242 @@ class Component extends DCLogic {
     S(cur.s, Cc); S(oth.s, O); ov.style.opacity = V.op; ov.style.background = V.bg;
   }
 
+  // ---------- Medien-KI: Sequenzen ----------
+  async waitUrl(src) {
+    if (!src) return ''; if (isImgPath(src) && !src.startsWith('idb:')) return src;
+    this.url(src); for (let i = 0; i < 200 && !this.urls[src]; i++) await new Promise(r => setTimeout(r, 100));
+    return this.urls[src] || '';
+  }
+  async getBlob(src) { if (src.startsWith('idb:')) return C().IDB.get(src.slice(4)); const r = await fetch(src); return r.blob(); }
+  openSeq(m) { this.setState({ seq: { mid: m.id, busy: true, prog: 0, sens: 5, maxLen: 3, items: [], fmt: 'reel', len: 15, style: this.state.ki.style || 'energie', info: null } }, () => this.analyzeSeq()); }
+  async analyzeSeq() {
+    const sq = this.state.seq; if (!sq) return; const m = this.media(sq.mid); if (!m) return;
+    this.setState({ seq: { ...sq, busy: true, prog: 0, items: [] } });
+    try {
+      const url = await this.waitUrl(m.src); if (!url) throw new Error('Video ist noch nicht geladen.');
+      let last = 0; const r = await window.ASMedia.detectScenes(url, { sens: sq.sens, maxLen: sq.maxLen }, p => { const now = Date.now(); if (now - last > 120) { last = now; this.setState(s => s.seq ? { seq: { ...s.seq, prog: p } } : null); } });
+      if (!this.state.seq) return;
+      const items = r.sequences.map((q, i) => ({ ...q, i, sel: true, label: q.color + ' · ' + q.mood }));
+      this.setState(s => ({ seq: { ...s.seq, busy: false, prog: 1, items, info: r } }));
+      if (!m.w && r.width) this.mutateP(np => { const x = np.media.find(y => y.id === m.id); if (x) { x.w = r.width; x.h = r.height; } });
+    } catch (e) { this.setState(s => s.seq ? { seq: { ...s.seq, busy: false } } : null); this.showToast('Analyse fehlgeschlagen: ' + e.message); }
+  }
+  saveSeqs() {
+    const sq = this.state.seq, m = this.media(sq.mid), pick = sq.items.filter(q => q.sel); if (!m || !pick.length) { this.showToast('Bitte mindestens eine Sequenz auswählen.'); return null; }
+    const ids = pick.map(() => C().uid()), thumbs = {};
+    this.mutateP(np => {
+      const parent = np.media.find(x => x.id === m.id); if (parent) parent.noAuto = true;
+      pick.forEach((q, j) => { thumbs[ids[j]] = q.thumb; np.media.push({ id: ids[j], kind: 'clip', label: m.label + ' · ' + fmtT(q.in).replace(/^00:/, '') + ' ' + q.mood, src: m.src, in: +q.in.toFixed(2), len: +q.len.toFixed(2), ar: m.ar, w: m.w, h: m.h,
+        tags: ['Sequenz'].concat(q.highlight ? ['Highlight'] : []), parent: m.id, energy: +q.energy.toFixed(2), mood: q.mood, added: Date.now() }); });
+    });
+    this.setState(s => ({ thumbs: { ...s.thumbs, ...thumbs } }));
+    return pick.map((q, j) => ({ ...q, mid: ids[j] }));
+  }
+  async seqCut() {
+    const sq = this.state.seq, p = this.proj(); if (!sq || sq.busy) return;
+    const saved = this.saveSeqs(); if (!saved) return;
+    if (!(await this.credit(2))) return;
+    this.setState(s => ({ seq: { ...s.seq, cutBusy: true } }));
+    const A = C(), F = A.fmtById(sq.fmt), len = +sq.len, style = sq.style, TRK = Object.keys(A.TR);
+    let order = null, why = '';
+    if (window.claude && window.claude.complete) {
+      try {
+        const list = saved.map((q, i) => i + ': ' + q.len.toFixed(1) + ' s, Energie ' + q.energy.toFixed(2) + ', ' + q.light + ', ' + q.color + ', ' + q.mood + (q.highlight ? ', Highlight' : '')).join('\n');
+        const prompt = 'Du bist Cutter für Event-Werbevideos (Paid Social).\nEvent: ' + p.name + ' (' + p.type + '). Schnitt-Stil: ' + ({ energie: 'Energie – schnell, Beat-getrieben', atmo: 'Atmosphäre – ruhig, emotional', clean: 'Clean – klar, chronologisch' }[style] || style) + '. Ziellänge: ' + len + ' s. Format: ' + F.label + '.\nSequenzen (Index: Länge, Energie 0–1, Helligkeit, Farbe, Stimmung):\n' + list +
+          '\nRegeln: Beginne mit der stärksten Hook (hohe Energie). Gesamtlänge ≈ Ziellänge (±0,5 s). Jede Dauer zwischen 0,4 s und der Länge der Sequenz. Eine Sequenz höchstens zweimal. Übergänge nur aus: ' + TRK.join(', ') + '. Erster Übergang "cut". Ende mit einer hellen oder ruhigeren Sequenz, damit der CTA lesbar ist.\nAntworte NUR mit JSON: {"schnitt":[{"i":0,"dur":1.2,"trans":"cut"}],"begruendung":"ein Satz"}';
+        const r = await window.claude.complete(prompt), j = JSON.parse(r.slice(r.indexOf('{'), r.lastIndexOf('}') + 1));
+        order = (j.schnitt || []).filter(o => saved[o.i]).map((o, k) => ({ i: o.i, dur: +A.clamp(+o.dur || 1, 0.4, saved[o.i].len).toFixed(2), trans: k && TRK.includes(o.trans) ? o.trans : 'cut' }));
+        why = j.begruendung || '';
+      } catch (e) { order = null; }
+    }
+    if (!order || !order.length) { order = window.ASMedia.heuristicCut(saved, { len, style }); why = 'Lokal nach Stil „' + style + '“ geschnitten.'; }
+    const phId = this.phaseId(p), fresh = A.buildAd(p, phId, sq.fmt, { len, style }), tot = order.reduce((a, o) => a + o.dur, 0), ftot = fresh.clips.reduce((a, c) => a + c.dur, 0) || fresh.len || len, k = tot / ftot;
+    const ad = { ...fresh, clips: order.map((o, j) => ({ id: A.uid(), asset: 'm:' + saved[o.i].mid, dur: o.dur, speed: '1', trans: j ? o.trans : 'cut', link: true })), sfx: [],
+      texts: fresh.texts.map(t => ({ ...t, start: +(t.start * k).toFixed(2), end: t.end >= 900 ? t.end : +Math.min(tot, t.end * k).toFixed(2) })), status: 'draft', len: +tot.toFixed(2), updated: Date.now(), ai: { source: sq.mid, style, why } };
+    const cur = this.proj(), vars = Object.keys(cur.ads).filter(x => x.startsWith(phId + ':' + sq.fmt + ':')).map(x => x.split(':')[2]), next = vars.length ? String.fromCharCode(Math.max(...vars.map(v => v.charCodeAt(0))) + 1) : 'A';
+    this.mutateP(np => { np.ads[phId + ':' + sq.fmt + ':' + next] = ad; });
+    this.setState({ seq: null }); this.openEditor(sq.fmt, next);
+    this.showToast('Neuer Schnitt als Variante ' + next + ' (' + order.length + ' Clips, ' + tot.toFixed(1) + ' s). ' + why);
+  }
+  seqVals() {
+    const sq = this.state.seq; if (!sq) return { hasSeq: false };
+    const m = this.media(sq.mid) || { label: '' }, A = C(), chip = on => ({ bg: on ? ACC : SURF, fg: on ? ACC_INK : INK, border: on ? ACC : LINE }), n = sq.items.filter(q => q.sel).length, upd = patch => this.setState(s => ({ seq: { ...s.seq, ...patch } }));
+    return { hasSeq: true, closeSeq: () => this.setState({ seq: null }), sqTitle: m.label,
+      sqSub: sq.info ? sq.items.length + ' Sequenzen aus ' + sq.info.duration.toFixed(1) + ' s · Szenenwechsel und bewegteste Momente erkannt' : 'Schnitte, Bewegung, Helligkeit und Farbe werden analysiert …',
+      sqSens: sq.sens, sqOnSens: e => upd({ sens: +e.target.value }), sqLens: [2, 3, 4, 6].map(v => ({ label: v + ' s', ...chip(sq.maxLen === v), on: () => upd({ maxLen: v }) })), sqAnalyze: () => this.analyzeSeq(),
+      sqBusy: sq.busy, sqProg: Math.round((sq.prog || 0) * 100) + '%', sqBusyText: 'Analysiere Video … ' + Math.round((sq.prog || 0) * 100) + ' %',
+      sqItems: sq.items.map((q, i) => ({ thumb: q.thumb, range: q.in.toFixed(1) + '–' + (q.in + q.len).toFixed(1) + ' s', label: q.label, highlight: !!q.highlight, energy: Math.round(q.energy * 100) + '%', eColor: q.energy > 0.66 ? '#ff7a6b' : q.energy > 0.33 ? '#ffc65c' : '#5ee0c8',
+        border: q.sel ? 'var(--acc)' : LINE, op: q.sel ? 1 : 0.55, chk: q.sel ? '✓' : '', chkBg: q.sel ? 'var(--acc)' : 'rgba(18,18,25,.6)', toggle: () => upd({ items: sq.items.map((x, j) => j === i ? { ...x, sel: !x.sel } : x) }) })),
+      sqCount: n + ' von ' + sq.items.length + ' ausgewählt', sqAllLabel: n === sq.items.length ? 'Keine' : 'Alle', sqAll: () => upd({ items: sq.items.map(x => ({ ...x, sel: n !== sq.items.length })) }),
+      sqStyles: [['energie', 'Energie'], ['atmo', 'Atmosphäre'], ['clean', 'Clean']].map(([id, l]) => ({ label: l, ...chip(sq.style === id), on: () => upd({ style: id }) })),
+      sqFmts: A.FORMATS.filter(x => x.kind === 'video').map(x => ({ value: x.id, label: x.label })), sqFmt: sq.fmt, sqOnFmt: e => upd({ fmt: e.target.value }), sqLen: String(sq.len), sqOnLen: e => upd({ len: +e.target.value }),
+      sqSave: () => { if (sq.busy) return; const r = this.saveSeqs(); if (r) { this.setState({ seq: null }); this.showToast(r.length + ' Sequenzen als Clips in der Mediathek – die KI nutzt sie ab jetzt beim Schnitt.'); } },
+      sqCut: () => this.seqCut(), sqCutLabel: sq.cutBusy ? 'KI schneidet …' : '✦ KI-Schnitt erstellen' };
+  }
+
+  // ---------- Grafik-Studio ----------
+  gpx = {}; gHist = [];
+  openGraphic(mid) {
+    const p = this.proj(), b = this.brand(p), m = mid && this.media(mid);
+    this.gpx = {}; this.gHist = []; this.stopAll();
+    const g = m ? { name: m.label + (m.doc ? '' : ' · bearbeitet'), srcId: m.doc ? m.from || null : m.id, targetId: m.doc ? m.id : null, mode: 'objects', k: 6, w: 1080, h: 1350, bg: b.paper, layers: [], palette: [], centers: [], sel: null, busy: 'Grafik wird zerlegt …', variants: [] }
+      : { name: 'Neue Grafik', srcId: null, targetId: null, mode: 'objects', k: 6, w: 1080, h: 1350, bg: b.ink, layers: [], palette: [], centers: [], sel: null, busy: '', variants: [] };
+    this.set({ view: 'graphic', g, sel: null, playing: false });
+    if (m && m.doc) this.gLoadDoc(m); else if (m) this.gDecompose();
+  }
+  setG(fn, hist) { if (hist) { const g = this.state.g; this.gHist.push({ layers: g.layers.map(l => ({ ...l })), palette: g.palette.map(c => ({ ...c })), bg: g.bg, w: g.w, h: g.h }); if (this.gHist.length > 60) this.gHist.shift(); } this.setState(s => ({ g: s.g ? { ...s.g, ...(typeof fn === 'function' ? fn(s.g) : fn) } : s.g })); }
+  gUndo() { const h = this.gHist.pop(); if (!h) return; this.setState(s => ({ g: { ...s.g, ...h } }), () => this.gRender()); }
+  async gDecompose() {
+    const g = this.state.g; if (!g || !g.srcId) return; const m = this.media(g.srcId); if (!m) return;
+    if (!(await this.credit(1))) { this.setG({ busy: '' }); return; }
+    this.setG({ busy: g.mode === 'colors' ? 'Farbebenen werden getrennt …' : 'Objekte und Farbprofil werden erkannt …' }, this.state.g.layers.length > 0);
+    try {
+      const url = await this.waitUrl(m.src); await new Promise(r => setTimeout(r, 30));
+      const r = await window.ASMedia.decompose(url, { k: g.k, mode: g.mode });
+      this.gpx = {}; const layers = r.layers.map(l => { const id = C().uid(); this.gpx[id] = l.data; return { id, type: 'pixel', name: l.name, x: l.x, y: l.y, w: l.w, h: l.h, s: 1, rot: 0, op: 1, vis: true, tint: null, bgLayer: !!l.bg, url: '' }; });
+      const patch = { w: r.w, h: r.h, srcW: r.w, srcH: r.h, layers, palette: r.palette, centers: r.centers, bg: r.palette.find(c => c.bg) ? r.palette.find(c => c.bg).hex : g.bg, sel: null, busy: 'Ebenen werden aufgebaut …', variants: [] };
+      this.setG(patch); await this.gRender(null, { ...this.state.g, ...patch }); this.setG({ busy: '' }); this.showToast(layers.length + ' Ebenen und ' + r.palette.length + ' Farben erkannt.');
+    } catch (e) { this.setG({ busy: '' }); this.showToast('Zerlegen fehlgeschlagen: ' + e.message); }
+  }
+  async gRender(ids, gIn) {
+    const tok = (this.gTok = (this.gTok || 0) + 1), g = gIn || this.state.g; if (!g) return; const M = window.ASMedia;
+    const targets = g.palette.map(c => c.hex !== c.orig ? c.hex : null), out = {};
+    for (const l of g.layers) { if (l.type !== 'pixel' || !this.gpx[l.id] || (ids && !ids.includes(l.id))) continue; out[l.id] = await M.toBlobURL(M.recolor(this.gpx[l.id], g.centers, l.noPal ? [] : targets, l.tint)); if (tok !== this.gTok) { Object.values(out).forEach(u => URL.revokeObjectURL(u)); return; } }
+    await new Promise(res => this.setState(s => { if (!s.g) return null; return { g: { ...s.g, layers: s.g.layers.map(l => { if (!out[l.id]) return l; if (l.url && l.url.startsWith('blob:')) setTimeout(() => URL.revokeObjectURL(l.url), 2000); return { ...l, url: out[l.id] }; }) } }; }, res));
+  }
+  gLater(ids) { clearTimeout(this.gT); this.gT = setTimeout(() => this.gRender(ids), 140); }
+  gUpd(id, patch, hist = true) { this.setG(g => ({ layers: g.layers.map(l => l.id === id ? { ...l, ...patch } : l) }), hist); }
+  gAdd(layer) { const id = C().uid(); this.setG(g => ({ layers: [...g.layers, { s: 1, rot: 0, op: 1, vis: true, ...layer, id }], sel: id }), true); return id; }
+  gDown(e, l) { e.stopPropagation(); this.setG({ sel: l.id }); this.gHistPending = true; this.drag = { kind: 'gmove', id: l.id, x0: e.clientX, y0: e.clientY, ox: l.x, oy: l.y }; }
+  gDrag(e, d) {
+    const g = this.state.g; if (!g) return; const dx = e.clientX - d.x0, dy = e.clientY - d.y0, sc = this.gSc || 1; if (Math.abs(dx) + Math.abs(dy) < 2) return;
+    const hist = !!this.gHistPending; this.gHistPending = false;
+    if (d.kind === 'gmove') this.gUpd(d.id, { x: Math.round(d.ox + dx / sc), y: Math.round(d.oy + dy / sc) }, hist);
+    else { const l = g.layers.find(x => x.id === d.id); if (!l) return; const span = (l.w + l.h) * d.os * sc; this.gUpd(d.id, { s: +Math.max(0.05, d.os * (1 + (dx + dy) / Math.max(20, span))).toFixed(3) }, hist); }
+  }
+  async gAddImage(mid) {
+    const m = this.media(mid), g = this.state.g; if (!m || !g) return;
+    try { const url = await this.waitUrl(m.src), im = await window.ASMedia.loadImage(url), sc = Math.min(1, 0.6 * Math.min(g.w / im.naturalWidth, g.h / im.naturalHeight)), w = Math.max(1, Math.round(im.naturalWidth * sc)), h = Math.max(1, Math.round(im.naturalHeight * sc));
+      const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d'); x.drawImage(im, 0, 0, w, h);
+      const id = this.gAdd({ type: 'pixel', name: m.label, x: Math.round((g.w - w) / 2), y: Math.round((g.h - h) / 2), w, h, tint: null, noPal: true, url: '' }); this.gpx[id] = x.getImageData(0, 0, w, h); this.gRender([id]); this.touchMedia(m.id);
+    } catch (e) { this.showToast(e.message); }
+  }
+  gResize(val) {
+    const g = this.state.g, [nw, nh] = val === 'src' ? [g.srcW || g.w, g.srcH || g.h] : val.split('x').map(Number); if (!nw || (nw === g.w && nh === g.h)) return;
+    const fit = Math.min(nw / g.w, nh / g.h), cov = Math.max(nw / g.w, nh / g.h), ox = (nw - g.w * fit) / 2, oy = (nh - g.h * fit) / 2;
+    this.setG(gg => ({ w: nw, h: nh, layers: gg.layers.map(l => { if (l.bgLayer) { const w = l.w * cov, h = l.h * cov; return { ...l, x: Math.round((nw - w) / 2), y: Math.round((nh - h) / 2), w: Math.round(w), h: Math.round(h) }; }
+      if (l.type === 'text') return { ...l, x: Math.round(l.x * fit + ox), y: Math.round(l.y * fit + oy), size: Math.round(l.size * fit) };
+      return { ...l, x: Math.round(l.x * fit + ox), y: Math.round(l.y * fit + oy), w: Math.round(l.w * fit), h: Math.round(l.h * fit), radius: Math.round((l.radius || 0) * fit) }; }) }), true);
+  }
+  gBrandMap() {
+    const g = this.state.g, b = this.brand(), order = g.palette.map((c, i) => i).sort((a, c) => (g.palette[c].bg - g.palette[a].bg) || g.palette[c].pct - g.palette[a].pct), map = [b.ink, b.primary, b.paper];
+    const pal = g.palette.map(c => ({ ...c })); order.forEach((pi, j) => { if (map[j]) pal[pi].hex = map[j]; }); return pal;
+  }
+  async gKi() {
+    const g = this.state.g, p = this.proj(), b = this.brand(p); if (!g.palette.length) return;
+    if (!(await this.credit(1))) return; this.setG({ kiBusy: true });
+    let vars = null;
+    if (window.claude && window.claude.complete) {
+      try { const prompt = 'Erzeuge 3 Farbvarianten für eine Event-Grafik.\nEvent: ' + p.name + ' (' + p.type + '). Brand: Akzent ' + b.primary + ', Dunkel ' + b.ink + ', Hell ' + b.paper + '.\nAktuelle Palette (Reihenfolge beibehalten): ' + g.palette.map(c => c.hex + ' ' + c.pct + '%' + (c.bg ? ' Hintergrund' : '')).join(', ') +
+          '.\nRegeln: genau ' + g.palette.length + ' Farben je Variante, gleiche Reihenfolge, starker Kontrast zwischen Hintergrund und Vordergrund, mindestens eine Variante nah an der Brand.\nAntworte NUR mit JSON: {"varianten":[{"name":"","farben":["#rrggbb"]}]}';
+        const r = await window.claude.complete(prompt), j = JSON.parse(r.slice(r.indexOf('{'), r.lastIndexOf('}') + 1));
+        vars = (j.varianten || []).filter(v => Array.isArray(v.farben) && v.farben.length === g.palette.length && v.farben.every(h => /^#[0-9a-f]{6}$/i.test(h))).slice(0, 4);
+      } catch (e) { vars = null; }
+    }
+    if (!vars || !vars.length) vars = [{ name: 'Brand', farben: this.gBrandMap().map(c => c.hex) }];
+    this.setG({ variants: vars, kiBusy: false });
+  }
+  async gSerialize() {
+    const g = this.state.g, M = window.ASMedia;
+    return { v: 1, name: g.name, w: g.w, h: g.h, srcW: g.srcW, srcH: g.srcH, bg: g.bg, mode: g.mode, k: g.k, srcId: g.srcId, palette: g.palette, centers: g.centers,
+      layers: g.layers.map(l => ({ ...l, url: undefined, data: l.type === 'pixel' && this.gpx[l.id] ? M.toDataURL(this.gpx[l.id]) : undefined })) };
+  }
+  async gLoadDoc(m) {
+    try { const blob = await this.getBlob(m.doc), doc = JSON.parse(await blob.text()); this.gpx = {};
+      for (const l of doc.layers) if (l.data) { this.gpx[l.id] = await window.ASMedia.fromDataURL(l.data); delete l.data; }
+      const patch = { ...doc, layers: doc.layers.map(l => ({ ...l, url: '' })), name: m.label, targetId: m.id, sel: null, busy: 'Ebenen werden geladen …', variants: [] };
+      this.setG(patch); await this.gRender(null, { ...this.state.g, ...patch }); this.setG({ busy: '' });
+    } catch (e) { this.showToast('Grafik konnte nicht geöffnet werden – wird neu zerlegt.'); this.setG({ srcId: m.from || m.id, targetId: null }); this.gDecompose(); }
+  }
+  async gComposite() {
+    if (this.state.g.layers.some(l => l.type === 'pixel' && !l.url)) { await this.gRender(); await new Promise(r => setTimeout(r, 60)); }
+    await (document.fonts ? document.fonts.ready : Promise.resolve());
+    const g = this.state.g, b = this.brand(), A = C(), FD = f => A.FONTS[f] || ["'" + f + "',sans-serif", 700];
+    return window.ASMedia.composite(g, g.w, g.h, { display: FD(b.display), text: FD(b.text) });
+  }
+  async gSave() {
+    const g = this.state.g, p = this.proj(); if (!this.guard('ad.edit') || g.saving) return; this.setG({ saving: true });
+    try {
+      const API = window.ASApi, blob = await this.gComposite(), id = C().uid(), src = await API.putMedia(id, blob, p.id);
+      const docBlob = new Blob([JSON.stringify(await this.gSerialize())], { type: 'application/json' }), docSrc = await API.putMedia(id + 'd', docBlob, p.id);
+      this.urls[src] = URL.createObjectURL(blob); this.blobs[src] = blob; this.loading[src] = 1;
+      const entry = { kind: 'image', label: g.name || 'Grafik', src, ar: g.w / g.h, w: g.w, h: g.h, doc: docSrc, from: g.srcId, tags: ['Key Visual'] };
+      let tid = g.targetId; const old = tid && this.media(tid);
+      this.mutateP(np => { const ex = tid && np.media.find(x => x.id === tid); if (ex) Object.assign(ex, entry, { updated: Date.now() }); else { tid = id; np.media.push({ id, ...entry, added: Date.now() }); } });
+      if (old && old.src && !old.src.startsWith('assets/')) { const oid = (old.src.match(/idb:(.+)$/) || [])[1]; if (oid) API.delMedia(oid); }
+      this.setG({ targetId: tid, saving: false }); this.showToast('„' + entry.label + '“ in der Mediathek gespeichert – als Hintergrund oder Clip nutzbar.');
+    } catch (e) { this.setG({ saving: false }); this.showToast('Speichern fehlgeschlagen: ' + e.message); }
+  }
+  async gDownload() { const g = this.state.g, blob = await this.gComposite(), a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = (g.name || 'grafik').replace(/[^\w\-äöüÄÖÜß ]+/g, '').trim() + '.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+  graphicVals(p, b) {
+    const s = this.state, g = s.g, A = C(), chip = on => ({ bg: on ? ACC : SURF, fg: on ? ACC_INK : INK, border: on ? ACC : LINE });
+    if (!g) { setTimeout(() => this.set({ view: 'project' }), 0); return { isGraphic: false }; }
+    const box = this.gBox || { w: 700, h: 560 }, sc = Math.max(0.05, Math.min((box.w - 32) / g.w, (box.h - 32) / g.h, 2)); this.gSc = sc;
+    const FD = f => A.FONTS[f] || ["'" + f + "',sans-serif", 700], sel = g.layers.find(l => l.id === g.sel), M = window.ASMedia;
+    const move = (id, dir) => this.setG(gg => { const L = [...gg.layers], i = L.findIndex(l => l.id === id), j = i + dir; if (j < 0 || j >= L.length) return {}; [L[i], L[j]] = [L[j], L[i]]; return { layers: L }; }, true);
+    const num = (k, fn) => e => { const v = parseFloat(e.target.value); if (!isNaN(v) && sel) this.gUpd(sel.id, { [k]: fn ? fn(v) : v }, !this.gSlide); };
+    const slide = k => e => { const v = parseFloat(e.target.value); if (isNaN(v) || !sel) return; const first = !this.gSlideT; clearTimeout(this.gSlideT); this.gSlideT = setTimeout(() => { this.gSlideT = null; }, 500); this.gUpd(sel.id, { [k]: v }, first); };
+    const icon = l => l.type === 'text' ? 'T' : l.type === 'shape' ? (l.shape === 'ellipse' ? '◯' : '▭') : '';
+    const sizes = [['src', 'Original' + (g.srcW ? ' · ' + g.srcW + '×' + g.srcH : '')], ['1080x1920', '9:16 · 1080×1920'], ['1080x1350', '4:5 · 1080×1350'], ['1080x1080', '1:1 · 1080×1080'], ['1200x628', 'Link · 1200×628'], ['1920x1080', '16:9 · 1920×1080'], ['970x250', 'Billboard · 970×250']];
+    const cur = sizes.find(([v]) => v === g.w + 'x' + g.h) ? g.w + 'x' + g.h : (g.srcW === g.w && g.srcH === g.h ? 'src' : 'custom');
+    const out = { isGraphic: true, gTitle: g.srcId ? '◧ ' + ((this.media(g.srcId) || {}).label || 'Grafik') : '◧ Neue Grafik', gHasSource: !!g.srcId, gCount: g.layers.length,
+      gModes: [['objects', 'Objekte'], ['colors', 'Farbebenen']].map(([id, l]) => ({ label: l, ...chip(g.mode === id), on: () => { this.setG({ mode: id }); setTimeout(() => this.gDecompose(), 0); } })),
+      gK: g.k, gOnK: e => this.setG({ k: +e.target.value }), gRedecompose: () => this.gDecompose(), gUndo: () => this.gUndo(), gUndoOp: this.gHist.length ? 1 : 0.4,
+      gSizes: sizes.concat(cur === 'custom' ? [['custom', g.w + '×' + g.h]] : []).map(([value, label]) => ({ value, label })), gSize: cur, gOnSize: e => { if (e.target.value !== 'custom') this.gResize(e.target.value); },
+      gStage: this.gStage, gCw: (g.w * sc).toFixed(1) + 'px', gCh: (g.h * sc).toFixed(1) + 'px', gBg: g.bg, gOnBg: e => this.setG({ bg: e.target.value }), gCanvasDown: () => this.setG({ sel: null }),
+      gIsBusy: !!g.busy, gBusy: g.busy,
+      gLayers: g.layers.map(l => { const isT = l.type === 'text', F = FD(l.font === 'text' ? b.text : b.display);
+        return { left: (l.x * sc).toFixed(1) + 'px', top: (l.y * sc).toFixed(1) + 'px', w: isT ? 'auto' : (l.w * sc).toFixed(1) + 'px', h: isT ? 'auto' : (l.h * sc).toFixed(1) + 'px', tf: 'rotate(' + (l.rot || 0) + 'deg) scale(' + (l.s || 1) + ')', op: l.vis ? (l.op ?? 1) : 0,
+          url: l.url ? "url('" + l.url + "')" : 'none', fill: l.type === 'shape' ? l.fill : isT ? (l.bg || 'transparent') : 'transparent', radius: l.type === 'shape' ? (l.shape === 'ellipse' ? '50%' : ((l.radius || 0) * sc).toFixed(1) + 'px') : '0',
+          outline: l.id === g.sel ? '2px dashed #a99bff' : 'none', text: isT ? l.text : '', fs: isT ? (l.size * sc).toFixed(1) + 'px' : '0px', ff: F[0], fw: F[1], color: l.color || '#ffffff', pad: isT && l.bg ? (l.size * 0.22 * sc).toFixed(1) + 'px' : '0', pe: l.vis ? 'auto' : 'none', down: e => this.gDown(e, l) }; }),
+      gHasHandle: !!sel && sel.type !== 'text' && sel.vis, gHx: sel ? ((sel.x + sel.w / 2 + sel.w * (sel.s || 1) / 2) * sc).toFixed(1) + 'px' : '0', gHy: sel ? ((sel.y + sel.h / 2 + sel.h * (sel.s || 1) / 2) * sc).toFixed(1) + 'px' : '0',
+      gScaleDown: e => { e.stopPropagation(); if (!sel) return; this.gHistPending = true; this.drag = { kind: 'gscale', id: sel.id, x0: e.clientX, y0: e.clientY, os: sel.s || 1 }; },
+      gLayersList: [...g.layers].reverse().map(l => ({ name: l.name, icon: icon(l), thumb: l.type === 'pixel' && l.url ? "url('" + l.url + "')" : 'none', sw: l.type === 'shape' ? l.fill : l.type === 'text' ? (l.color || '#fff') : '#141419',
+        bg: l.id === g.sel ? SOFT : 'transparent', fg: l.vis ? INK : MUTED, visIcon: l.vis ? '◉' : '○', visColor: l.vis ? ACC_FG : MUTED,
+        select: () => this.setG({ sel: l.id }), toggleVis: e => { e.stopPropagation(); this.gUpd(l.id, { vis: !l.vis }); }, up: e => { e.stopPropagation(); move(l.id, 1); }, down: e => { e.stopPropagation(); move(l.id, -1); } })),
+      gImgOpts: p.media.filter(m => m.kind === 'image').map(m => ({ id: m.id, label: m.label })), gAddImage: e => { const v = e.target.value; e.target.value = ''; if (v) this.gAddImage(v); },
+      gAddText: () => this.gAdd({ type: 'text', name: 'Text', text: 'DEIN TEXT', size: Math.round(Math.min(g.w, g.h) * 0.08), font: 'display', color: b.paper, bg: b.primary, x: Math.round(g.w * 0.1), y: Math.round(g.h * 0.4) }),
+      gAddRect: () => this.gAdd({ type: 'shape', shape: 'rect', name: 'Rechteck', fill: b.primary, radius: 0, w: Math.round(g.w * 0.5), h: Math.round(g.h * 0.12), x: Math.round(g.w * 0.25), y: Math.round(g.h * 0.44) }),
+      gAddEllipse: () => { const d = Math.round(Math.min(g.w, g.h) * 0.3); this.gAdd({ type: 'shape', shape: 'ellipse', name: 'Kreis', fill: b.primary, w: d, h: d, x: Math.round((g.w - d) / 2), y: Math.round((g.h - d) / 2) }); },
+      gHasPalette: g.palette.length > 0,
+      gPalette: g.palette.map((c, i) => ({ hex: c.hex, pct: c.pct + ' %', name: c.name + (c.bg ? ' · Hintergrund' : ''), changed: c.hex !== c.orig,
+        on: e => { const v = e.target.value; const first = !this.gColT; clearTimeout(this.gColT); this.gColT = setTimeout(() => { this.gColT = null; }, 600); this.setG(gg => ({ palette: gg.palette.map((x, j) => j === i ? { ...x, hex: v } : x), bg: c.bg && gg.bg === c.hex ? v : gg.bg }), first); this.gLater(); },
+        reset: () => { this.setG(gg => ({ palette: gg.palette.map((x, j) => j === i ? { ...x, hex: x.orig } : x) }), true); this.gLater(); } })),
+      gBrand: () => { const pal = this.gBrandMap(), bgc = pal.find(c => c.bg); this.setG(gg => ({ palette: pal, bg: bgc ? bgc.hex : gg.bg }), true); this.gLater(); },
+      gKi: () => this.gKi(), gKiLabel: g.kiBusy ? 'KI denkt …' : '✦ KI-Varianten', gHasVariants: (g.variants || []).length > 0,
+      gVariants: (g.variants || []).map(v => ({ name: v.name, sw: v.farben, on: () => { const bi = g.palette.findIndex(c => c.bg); this.setG(gg => ({ palette: gg.palette.map((c, j) => ({ ...c, hex: v.farben[j] })), bg: bi >= 0 ? v.farben[bi] : gg.bg }), true); this.gLater(); } })),
+      gHasSel: !!sel, gFontD: b.display, gFontT: b.text,
+      gs: sel ? { name: sel.name, x: Math.round(sel.x), y: Math.round(sel.y), s: sel.s || 1, sLabel: Math.round((sel.s || 1) * 100) + ' %', rot: sel.rot || 0, rotLabel: (sel.rot || 0) + '°', op: sel.op ?? 1, opLabel: Math.round((sel.op ?? 1) * 100) + ' %',
+        isPixel: sel.type === 'pixel', tint: sel.tint || '#ffffff', hasTint: !!sel.tint, isText: sel.type === 'text', text: sel.text || '', size: sel.size || 40, font: sel.font || 'display', color: sel.color || '#ffffff', bgc: sel.bg || b.primary, hasBg: !!sel.bg,
+        isShape: sel.type === 'shape', fill: sel.fill || '#ffffff', radius: sel.radius || 0 } : {},
+      gOnName: e => sel && this.gUpd(sel.id, { name: e.target.value }, false), gOnX: num('x'), gOnY: num('y'), gOnS: slide('s'), gOnRot: slide('rot'), gOnOp: slide('op'),
+      gOnTint: e => { if (!sel) return; const v = e.target.value, first = !this.gColT; clearTimeout(this.gColT); this.gColT = setTimeout(() => { this.gColT = null; }, 600); this.gUpd(sel.id, { tint: v }, first); this.gLater([sel.id]); },
+      gClearTint: () => { if (sel) { this.gUpd(sel.id, { tint: null }); this.gLater([sel.id]); } },
+      gOnText: e => sel && this.gUpd(sel.id, { text: e.target.value }, false), gOnSize2: num('size', v => Math.max(8, v)), gOnFont: e => sel && this.gUpd(sel.id, { font: e.target.value }),
+      gOnColor: e => sel && this.gUpd(sel.id, { color: e.target.value }, false), gOnTBg: e => sel && this.gUpd(sel.id, { bg: e.target.value }, false), gOnHasBg: e => sel && this.gUpd(sel.id, { bg: e.target.checked ? (sel.lastBg || b.primary) : null, lastBg: sel.bg || sel.lastBg }),
+      gOnFill: e => sel && this.gUpd(sel.id, { fill: e.target.value }, false), gOnRadius: slide('radius'),
+      gDup: () => { if (!sel) return; const id = this.gAdd({ ...sel, id: undefined, name: sel.name + ' Kopie', x: sel.x + 20, y: sel.y + 20 }); if (this.gpx[sel.id]) { this.gpx[id] = this.gpx[sel.id]; } },
+      gDel: () => this.gDelSel(),
+      gName: g.name, gOnDocName: e => this.setG({ name: e.target.value }), gSave: () => this.gSave(), gSaveLabel: g.saving ? 'Speichert …' : g.targetId ? 'Änderungen speichern' : 'In Mediathek speichern', gDownload: () => this.gDownload(),
+      gOutInfo: 'Export ' + g.w + '×' + g.h + ' px · PNG' + (g.srcId ? ' · Ebenen bleiben bearbeitbar' : '') };
+    return out;
+  }
+  gDelSel() { const g = this.state.g; if (!g || !g.sel) return; const id = g.sel; this.setG(gg => ({ layers: gg.layers.filter(l => l.id !== id), sel: null }), true); }
+
   // ---------- drag ----------
   handleMove(e) {
     const d = this.drag; if (!d) return;
+    if (d.kind === 'gmove' || d.kind === 'gscale') { this.gDrag(e, d); return; }
     const dx = e.clientX - d.x0, dy = e.clientY - d.y0, pps = this.state.zoom;
     if (d.kind === 'scrub') { const r = this.tlScroll.current; if (!r) return; const rect = r.getBoundingClientRect(); this.seek((e.clientX - rect.left + r.scrollLeft) / pps); return; }
     if (Math.abs(dx) + Math.abs(dy) < 2) return;
@@ -1425,16 +1826,17 @@ class Component extends DCLogic {
     if (view === 'account') crumbs.push({ label: 'Konto', on: () => {}, fw: 700, color: INK });
     else if (p) {
       crumbs.push({ label: p.name, on: () => { this.stopAll(); this.set({ view: 'project', sel: null, playing: false }); }, fw: view === 'project' ? 700 : 500, color: view === 'project' ? INK : MUTED });
+      if (view === 'graphic' && s.g) crumbs.push({ label: 'Grafik-Studio · ' + (s.g.name || ''), on: () => {}, fw: 700, color: INK });
       if (view === 'editor') { const ph = p.phases.find(x => x.id === this.phaseId()); crumbs.push({ label: (ph ? ph.label : '') + ' · ' + this.fmt().label + ' · ' + s.variant, on: () => {}, fw: 700, color: INK }); }
     }
-    const base = { loading: false, goHome, crumbs, isHome: view === 'home', isProject: view === 'project', isEditor: view === 'editor', isAccount: view === 'account', isAuth: false, showHeader: true, hasUser: true,
+    const base = { loading: false, goHome, crumbs, isHome: view === 'home', isProject: view === 'project', isEditor: view === 'editor', isGraphic: false, isAccount: view === 'account', isAuth: false, showHeader: true, hasUser: true,
       userName: s.user.name || s.user.email, userInitials: (s.user.name || s.user.email).split(/[\s@.]+/).filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase(),
       goAccount: () => { this.stopAll(); this.set({ view: 'account', accTab: 'profile', sel: null, playing: false }); }, showNew: s.showNew,
       goBilling: () => { this.stopAll(); this.set({ view: 'account', accTab: 'billing', sel: null, playing: false }); this.loadTeam(); },
       appName: (s.user.limits || {}).whitelabel && s.user.org ? s.user.org : 'Ad Studio',
       planBadge: (API.PLANS[s.user.plan] || API.PLANS.free).label + (s.user.trialEnds ? ' · Test ' + Math.max(0, Math.ceil((s.user.trialEnds - Date.now()) / 864e5)) + ' T.' : ''),
       ...(() => { const up = s.upsell, P = up && API.PLANS[up.plan]; return { hasUpsell: !!up, upTitle: P ? P.label + ' freischalten' : '', upText: up ? up.reason : '', upPlan: P ? P.label + ' · ab ' + P.price + ' € / Monat' : '', upFeatures: P ? P.features : [],
-        closeUpsell: () => this.setState({ upsell: null }), upGo: () => { this.setState({ upsell: null }); this.stopAll(); this.set({ view: 'account', accTab: 'billing', sel: null, playing: false }); this.loadTeam(); } }; })(), hasToast: !!s.toast, toast: s.toast,
+        ...this.seqVals(), closeUpsell: () => this.setState({ upsell: null }), upGo: () => { this.setState({ upsell: null }); this.stopAll(); this.set({ view: 'account', accTab: 'billing', sel: null, playing: false }); this.loadTeam(); } }; })(), hasToast: !!s.toast, toast: s.toast,
       openNew: () => { if (this.guard('project.create') && this.checkLimit('projects')) this.setState({ showNew: true, nf: this.newForm() }); }, fileInput: this.fileInput, onFiles: e => { const fl = Array.from(e.target.files || []); e.target.value = ''; this.addFiles(fl); },
       openUpload: () => this.fileInput.current && this.fileInput.current.click(), allowDrop: e => e.preventDefault(), typeOpts: A.EVENT_TYPES };
 
@@ -1537,7 +1939,8 @@ class Component extends DCLogic {
         const ago = t => { const d = Math.round((now - t) / 6e4); return d < 1 ? 'gerade' : d < 60 ? 'vor ' + d + ' Min.' : d < 1440 ? 'vor ' + Math.round(d / 60) + ' Std.' : 'vor ' + Math.round(d / 1440) + ' T.'; };
         const cnt = k => p.media.filter(m => k === 'all' || m.kind === k).length;
         Object.assign(base, { dropFiles: e => { e.preventDefault(); this.addFiles(Array.from(e.dataTransfer.files || [])); },
-          libSub: p.media.length + ' Dateien · ' + p.media.filter(m => m.fav).length + ' Favoriten · Tags helfen der KI beim Schnitt', mq: s.mq || '', onMq: e => this.setState({ mq: e.target.value }),
+          newGraphic: () => { if (this.guard('ad.edit')) this.openGraphic(null); },
+          libSub: p.media.length + ' Dateien · ' + p.media.filter(m => m.fav).length + ' Favoriten · Videos in Sequenzen schneiden, Grafiken in Ebenen zerlegen', mq: s.mq || '', onMq: e => this.setState({ mq: e.target.value }),
           kindChips: [['all', 'Alle'], ['clip', 'Video'], ['image', 'Bild'], ['audio', 'Audio']].map(([id, l]) => ({ label: l + ' ' + cnt(id), ...chip(s.mKind === id), on: () => this.setState({ mKind: id }) })),
           libFilters: [['fav', '★ Favoriten'], ['recent', 'Zuletzt genutzt']].map(([id, l]) => ({ label: l, ...chip(s.mFilter === id), on: () => this.setState({ mFilter: s.mFilter === id ? 'all' : id }) })),
           catOpts: CATS, mCat: s.mCat || '', onMCat: e => this.setState({ mCat: e.target.value }),
@@ -1550,6 +1953,8 @@ class Component extends DCLogic {
               fav: () => setM(i, x => { x.fav = !x.fav; }), favColor: m.fav ? '#ffc65c' : '#6f6d80', favTitle: m.fav ? 'Aus Favoriten entfernen' : 'Als Favorit markieren',
               tags: tags.map(t => ({ label: t, remove: () => setM(i, x => { x.tags = (x.tags || []).filter(y => y !== t); }) })), tagOpts: CATS.filter(c => !tags.includes(c)),
               addTag: e => { const v = e.target.value; if (v) setM(i, x => { x.tags = Array.from(new Set([...(x.tags || []), v])); }); },
+              hasAction: m.kind !== 'audio', actionLabel: m.kind === 'clip' ? '✂ Sequenzen erkennen' : m.doc ? '◧ Ebenen bearbeiten' : '◧ In Ebenen zerlegen',
+              action: () => { if (!this.guard('ad.edit')) return; m.kind === 'clip' ? this.openSeq(m) : this.openGraphic(m.id); },
               onLabel: e => setM(i, x => { x.label = e.target.value; }),
               del: () => { if (n && this.confirmDel !== m.id) { this.confirmDel = m.id; this.showToast('Asset steckt in ' + n + ' Ad(s) – erneut klicken zum Entfernen.'); setTimeout(() => { this.confirmDel = null; }, 4000); return; } this.mutateP(np => { np.media = np.media.filter(x => x.id !== m.id); }); if (!m.src.startsWith('assets/')) window.ASApi.delMedia(m.id); } }; }) });
       }
@@ -1567,6 +1972,7 @@ class Component extends DCLogic {
       return base;
     }
 
+    if (view === 'graphic') return { ...base, ...this.graphicVals(p, b) };
     // ---------- editor ----------
     const F = this.fmt(), ad = this.ad(), total = this.total(ad), isVideo = F.kind === 'video', t = s.t, sel = s.sel, selId = sel && sel.id, pps = s.zoom, starts = A.starts, clamp = A.clamp;
     const ph = p.phases.find(x => x.id === phId);

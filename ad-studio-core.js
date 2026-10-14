@@ -24,7 +24,7 @@ const PALETTES = [
   ['Forest Fest', '#1f8a5b', '#13241c', '#f1efe4'], ['Sunset', '#ff7a1a', '#2a1630', '#fff3e6'], ['Acid', '#d4f53c', '#111111', '#f5f5f0'],
 ];
 const STATUS = { draft: ['Entwurf', '#eeedf3', '#4a4858'], review: ['In Review', '#fff1d6', '#8a5a00'], approved: ['Freigegeben', '#dcf5ea', '#0f6e47'] };
-const MEDIA_CATS = ['Crowd', 'Bühne', 'Act', 'Location', 'Backstage', 'Detail', 'Logo', 'Key Visual', 'Musik', 'Voiceover'];
+const MEDIA_CATS = ['Sequenz', 'Highlight', 'Crowd', 'Bühne', 'Act', 'Location', 'Backstage', 'Detail', 'Logo', 'Key Visual', 'Musik', 'Voiceover'];
 const EVENT_TYPES = ['Konzert', 'Festival', 'Club', 'Theater', 'Comedy', 'Konferenz', 'Ausstellung', 'Messe', 'Sport', 'Party', 'Lesung'];
 const WD = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
 
