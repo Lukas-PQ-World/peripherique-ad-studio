@@ -1,0 +1,26 @@
+services:
+  api:
+    build: ../backend
+    restart: unless-stopped
+    env_file: ../backend/.env
+    environment:
+      DATA_DIR: /data
+      ASSET_ROOT: /srv/www
+      PUBLIC_URL: https://ad-studio.peripherique.de
+      APP_URL: https://ad-studio.peripherique.de/app
+      CORS_ORIGIN: https://ad-studio.peripherique.de
+    volumes:
+      - api-data:/data
+      - ../:/srv/www:ro
+  web:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../:/srv/www:ro
+      - caddy-data:/data
+    depends_on: [api]
+volumes:
+  api-data:
+  caddy-data:

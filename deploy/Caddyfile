@@ -1,0 +1,18 @@
+ad-studio.peripherique.de {
+	encode zstd gzip
+	@api path /api/* /oauth/* /media/* /renders/* /l/*
+	handle @api {
+		reverse_proxy api:8787
+	}
+	handle {
+		root * /srv/www
+		rewrite / "/Ad Studio Landing.dc.html"
+		rewrite /app "/Ad Studio.dc.html"
+		file_server
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+}
