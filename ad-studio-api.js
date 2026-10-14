@@ -1,9 +1,10 @@
 // Ad Studio API client. mode 'local' = Demo-Backend im Browser (IndexedDB), mode 'remote' = REST-Server (backend/).
 (function () {
 const CFG_KEY = 'ad-studio-api-cfg', TOK_KEY = 'ad-studio-token';
-// Auf der Produktiv-Domain automatisch den Server derselben Origin nutzen.
-const PROD = /(^|\.)peripherique\.de$/.test(location.hostname) || !!window.AS_API_BASE;
-const cfg = () => { let c = {}; try { c = JSON.parse(localStorage.getItem(CFG_KEY) || '{}'); } catch (e) {} return PROD && !c.mode ? { mode: 'remote', base: window.AS_API_BASE || location.origin } : c; };
+// API_BASE leer = Demo-Modus (alles im Browser, z. B. Cloudflare Pages ohne Server).
+// Sobald das Backend läuft, hier die URL eintragen, z. B. 'https://api.ad-studio.peripherique.de'.
+const API_BASE = window.AS_API_BASE || '';
+const cfg = () => { let c = {}; try { c = JSON.parse(localStorage.getItem(CFG_KEY) || '{}'); } catch (e) {} return API_BASE && !c.mode ? { mode: 'remote', base: API_BASE } : c; };
 const PLATFORMS = {
   instagram: { label: 'Instagram', ch: 'meta', short: 'IG', color: '#e1306c' },
   tiktok: { label: 'TikTok', ch: 'tiktok', short: 'TT', color: '#25f4ee' },
